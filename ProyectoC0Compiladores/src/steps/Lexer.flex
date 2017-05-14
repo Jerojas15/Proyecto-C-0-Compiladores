@@ -24,23 +24,14 @@ NUMBER = {DIGIT}+
 IDENTIFIER = {LETTER} | _ ({LETTER} | {DIGIT})*
 WHITESPACE = [ \r\n\t\f]
 CONSTANT = ".*"
-
-KEYWORD = "main"
-|"if"
-|"while"
-|"else"
-|"putw"
-|"puts"
-|"int"
-|"break"
-
+BOOL = "true" | "false"
 
 %%
 <YYINITIAL> {
         
         {WHITESPACE} {/* ignore */}
-        {KEYWORD} { 
-            return symbol( sym.KEYWORD, yytext());
+        {BOOL} {
+            return symbol(sym.BOOLEAN, new Boolean(yytext()));
         }
         {IDENTIFIER} {
             return symbol( sym.IDENTIFIER, yytext());
@@ -49,7 +40,31 @@ KEYWORD = "main"
             return symbol( sym.INTEGER , new Integer(yytext()));
         }
         {CONSTANT} {
-            return symbol( sym.CONSTANT,yytext());
+            return symbol( sym.CONSTANT, yytext());
+        }
+        "main" { 
+            return symbol( sym.MAIN);
+        }
+        "if" { 
+            return symbol( sym.IF);
+        }
+        "while" { 
+            return symbol( sym.WHILE);
+        }
+        "else" { 
+            return symbol( sym.ELSE);
+        }
+        "putw" { 
+            return symbol( sym.PUTW);
+        }
+        "puts" { 
+            return symbol( sym.PUTS);
+        }
+        "int" { 
+            return symbol( sym.INT);
+        }
+        "break" { 
+            return symbol( sym.BREAK);
         }
         "(" { 
             return symbol( sym.LPAR);

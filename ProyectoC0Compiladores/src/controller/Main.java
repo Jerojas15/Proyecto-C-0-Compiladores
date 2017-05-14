@@ -24,6 +24,7 @@ public class Main {
     public void preparedFiles() throws IOException, Exception{
         String[] in = {"-parser", "Parser", "src/steps/parser.cup"};
         jflex.Main.generate(new File("src/steps/Lexer.flex"));
+        System.out.println("Flex Ready");
         java_cup.Main.main(in);
         
         new File("Parser.java").renameTo(new File("src/steps/Parser.java"));
@@ -32,7 +33,7 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
         //new Main().preparedFiles();
-        String text= "(5+5)*2";
+        String text= "main(){if(false){8+4;}else{2+3;}}";
         Reader in = new BufferedReader(new StringReader(text));
 		Lexer l = new Lexer(in);
                 Parser p = new Parser(new Lexer(in));
@@ -41,3 +42,31 @@ public class Main {
     }
     
 }
+/*
+
+program   ::=  decllist:d stmtlist:s
+    ;
+decllist  ::=  decl:d decllist:dl
+    | /* empty 
+    ;
+stmtlist  ::= stmtlist:sl stmt:s
+    | /* empty 
+        ;
+decl ::= TYPE IDENT:identifier identlist:il  SEMICOLON
+    ;
+identlist  ::= identlist:il COMMA IDENT:identifier
+    | /* empty 
+    ;
+stmt ::= SEMICOLON
+    | BEGIN stmtlist:sl END
+    | IDENT:lhs ASSIGN expr:rhs SEMICOLON
+    | IDENT:lhs ASSIGN READ LPAR RPAR SEMICOLON
+    | IDENT:lhs ASSIGN READ LPAR STRINGCONST:s RPAR SEMICOLON
+    | WRITE LPAR expr:e RPAR SEMICOLON
+    | WRITE LPAR STRINGCONST:s RPAR SEMICOLON
+    | IF LPAR cond:c RPAR stmt:s
+    | IF LPAR cond:c RPAR stmt:t ELSE stmt:e
+    | WHILE LPAR cond:c RPAR stmt:s
+    ;
+
+*/
