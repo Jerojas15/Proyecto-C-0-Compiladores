@@ -1,6 +1,5 @@
 package steps;
 
-import structures.Token.*;
 import java_cup.runtime.Symbol;
 %%
 
@@ -11,12 +10,12 @@ import java_cup.runtime.Symbol;
 %column
 
 %{
-      /*private Symbol symbol(int type) {
+      private Symbol symbol(int type) {
         return new Symbol(type, yyline, yycolumn);
       }
       private Symbol symbol(int type, Object value) {
         return new Symbol(type, yyline, yycolumn, value);
-      }*/
+      }
 %}
 
 LETTER= [a-zA-Z]
@@ -35,97 +34,71 @@ KEYWORD = "main"
 |"int"
 |"break"
 
-%{
-public List<Token> tokens;
-%}
-
 
 %%
 <YYINITIAL> {
         
         {WHITESPACE} {/* ignore */}
         {KEYWORD} { 
-            tokens.add(new Token("KEYWORD",yytext()));
-            return KEYWORD;
+            return symbol( sym.KEYWORD, yytext());
         }
         {IDENTIFIER} {
-            tokens.add(new Token("IDENTIFIER",yytext()));
-            return IDENTIFIER;
+            return symbol( sym.IDENTIFIER, yytext());
         }
         {NUMBER} {
-            tokens.add(new Token("INTEGER",yytext()));
-            return INTEGER;
+            return symbol( sym.INTEGER , new Integer(yytext()));
         }
         {CONSTANT} {
-            tokens.add(new Token("CONSTANT",yytext()));
-            return CONSTANT;
+            return symbol( sym.CONSTANT,yytext());
         }
         "(" { 
-            tokens.add(new Token("DELIM",yytext()));
-            return LPAR;
+            return symbol( sym.LPAR);
         }
         ")" { 
-            tokens.add(new Token("DELIM",yytext()));
-            return RPAR;
+            return symbol( sym.RPAR);
         }
         "{" { 
-            tokens.add(new Token("DELIM",yytext()));
-            return LKEY;
+            return symbol( sym.LKEY);
         }
         "}" { 
-            tokens.add(new Token("DELIM",yytext()));
-            return RKEY;
+            return symbol( sym.RKEY);
         }
         ";" { 
-            tokens.add(new Token("DELIM",yytext()));
-            return SEMICOLON;
+            return symbol( sym.SEMICOLON);
         }
         "+" { 
-            tokens.add(new Token("ARITOP",yytext()));
-            return PLUS;
+            return symbol( sym.PLUS);
         }
         "-" { 
-            tokens.add(new Token("ARITOP",yytext()));
-            return MINUS;
+            return symbol( sym.MINUS);
         }
         "*" { 
-            tokens.add(new Token("ARITOP",yytext()));
-            return TIMES;
+            return symbol( sym.TIMES);
         }
         "/" { 
-            tokens.add(new Token("ARITOP",yytext()));
-            return DIVIDE;
+            return symbol( sym.DIVIDE);
         }
         "<" { 
-            tokens.add(new Token("RELAOP",yytext()));
-            return LESS;
+            return symbol( sym.LESS);
         }
         ">" { 
-            tokens.add(new Token("RELAOP",yytext()));
-            return MORE;
+            return symbol( sym.MORE);
         }
         "==" { 
-            tokens.add(new Token("RELAOP",yytext()));
-            return EQUAL;
+            return symbol( sym.EQUAL);
         }
         "¡=" { 
-            tokens.add(new Token("RELAOP",yytext()));
-            return NOTEQUAL;
+            return symbol( sym.NOTEQUAL);
         }
         "||" { 
-            tokens.add(new Token("LOGIOP",yytext()));
-            return OR;
+            return symbol( sym.OR);
         }
         "&&" { 
-            tokens.add(new Token("LOGIOP",yytext()));
-            return AND;
+            return symbol( sym.AND);
         }
         "=" { 
-            tokens.add(new Token("ASIGNOP",yytext()));
-            return ASIGN;
+            return symbol( sym.ASIGN);
         }  	      
 }
 . {System.out.print("error! Character not recognized");}
-<<EOF>> { System.out.println("Fin");/*return symbol(sym.EOF);*/ }
-
-
+<<EOF>> { System.out.println("Fin");return symbol(sym.EOF);}

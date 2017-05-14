@@ -1,0 +1,37 @@
+package steps;
+
+import java_cup.runtime.*;
+
+/* Terminals and Non Terminals */ 
+
+terminal            PLUS, MINUS, TIMES, DIVIDE; 
+terminal            MORE, LESS, EQUAL, NOTEQUAL;
+terminal            AND, OR, ASIGN;
+terminal            LPAR, RPAR, SEMICOLON, RKEY, LKEY;
+terminal            CONSTANT, IDENTIFIER, KEYWORD;
+terminal Integer    INTEGER;
+non terminal        expr;
+
+/* Precedence */ 
+
+precedence left     LPAR, RPAR; 
+precedence left     TIMES, DIVIDE; 
+precedence left     PLUS, MINUS; 
+precedence left     MORE, LESS; 
+precedence left     EQUAL, NOTEQUAL; 
+precedence left     AND, OR;
+precedence left     ASIGN;  
+
+
+/* Grammar Rules */ 
+
+
+expr    ::=     expr:e1 PLUS  expr:e2         {: RESULT = (Integer)e1+(Integer)e2;       :}
+                | expr:e1 MINUS expr:e2         {: RESULT = (Integer)e1-(Integer)e2;       :}
+                | expr:e1 TIMES expr:e2         {: RESULT = (Integer)e1*(Integer)e2;       :}
+                | expr:e1 DIVIDE expr:e2        {: RESULT = (Integer)e1/(Integer)e2;       :}
+                | MINUS expr:e                  {: RESULT = new Integer(0-(Integer)e);          :}
+                | LPAR expr:e RPAR          {: RESULT = e;           :}
+                | INTEGER:n                      {: RESULT = n;           :}
+                ;
+
