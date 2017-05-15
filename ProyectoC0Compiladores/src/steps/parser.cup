@@ -61,14 +61,18 @@ precedence left     ASIGN;
 
 program     ::= MAIN LPAR RPAR LKEY stmtlist:s RKEY {:System.out.println("SI ENTRA");RESULT = s;   :};
 
-stmtlist    ::= stmt:s                          {:RESULT = s;:}
+stmtlist    ::= stmt:s stmtlist:sl                          {:RESULT = s;:}
+                |stmt:s                                     {:RESULT = s;:}
                 ;
 
-stmt    ::=    IF LPAR cond:c RPAR LKEY expr:s RKEY                             {:if((Boolean)c){RESULT = (Integer)s;}:}
-               | IF LPAR cond:c RPAR LKEY expr:s RKEY ELSE LKEY expr:s2 RKEY    {:RESULT = ((Boolean)c)?(Integer)s:(Integer)s2;:}
-               ;
+stmt    ::=    IF LPAR cond:c RPAR LKEY stmt:s RKEY                             {: if((Boolean)c){RESULT = s;}:}
+               | IF LPAR cond:c RPAR LKEY stmt:s RKEY ELSE LKEY stmt:s2 RKEY    {: RESULT = ((Boolean)c)?s:s2;:}
+               | expr:s                                                         {:RESULT = s;:}
+                ;
 
 expr    ::=     ope:e SEMICOLON                 {:RESULT = e;:}
+                | PUTS LPAR CONSTANT:c RPAR SEMICOLON                           {: System.out.println("String "+(String)c);:}
+                | PUTW LPAR ope:e RPAR SEMICOLON                                {: System.out.println("int "+(Integer)e);:}
                 ;
 
 ope     ::=      LPAR ope:e RPAR              {: RESULT = e;                             :}

@@ -23,7 +23,7 @@ DIGIT = [0-9]
 NUMBER = {DIGIT}+
 IDENTIFIER = {LETTER} | _ ({LETTER} | {DIGIT})*
 WHITESPACE = [ \r\n\t\f]
-CONSTANT = ".*"
+CONSTANT = \"([a-zA-Z0-9]|{WHITESPACE})*\"
 BOOL = "true" | "false"
 
 %%
@@ -38,9 +38,6 @@ BOOL = "true" | "false"
         }
         {NUMBER} {
             return symbol( sym.INTEGER , new Integer(yytext()));
-        }
-        {CONSTANT} {
-            return symbol( sym.CONSTANT, yytext());
         }
         "main" { 
             return symbol( sym.MAIN);
@@ -113,7 +110,10 @@ BOOL = "true" | "false"
         }
         "=" { 
             return symbol( sym.ASIGN);
+        }
+        {CONSTANT} {
+            return symbol( sym.CONSTANT, yytext());
         }  	      
 }
-. {System.out.print("error! Character not recognized");}
+. {System.out.print("error! Character not recognized "+yytext());}
 <<EOF>> { System.out.println("Fin");return symbol(sym.EOF);}

@@ -33,7 +33,7 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
         //new Main().preparedFiles();
-        String text= "main(){if(false){8+4;}else{2+3;}}";
+        String text= "main(){if(true&&false){puts(\"if verdadero\");}else{if(true){putw(5+6);}}}";
         Reader in = new BufferedReader(new StringReader(text));
 		Lexer l = new Lexer(in);
                 Parser p = new Parser(new Lexer(in));
