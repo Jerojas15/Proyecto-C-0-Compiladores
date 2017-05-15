@@ -5,17 +5,15 @@
  */
 package ui;
 
+import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 //import steps.Lexer;
 
 /**
@@ -24,11 +22,20 @@ import java.util.logging.Logger;
  */
 public class IDE extends javax.swing.JFrame {
 
+    private static JFileChooser fileChooser;
+
+    
     /**
      * Creates new form IDE
      */
     public IDE() {
         initComponents();
+        this.getContentPane().setBackground(new Color(19,16,16));      
+        this.projectLabel.setBackground(new Color(51,51,51));
+        this.Tabs.setBackground(new Color(153,153,153));
+        //this.editorPane.setBackground(Color.red);
+        
+        fileChooser = new JFileChooser();
     }
 
     /**
@@ -40,75 +47,151 @@ public class IDE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
+        projectLabel = new javax.swing.JPanel();
+        Tabs = new javax.swing.JTabbedPane();
+        messageTab = new javax.swing.JLabel();
+        tokenTab = new javax.swing.JLabel();
+        scrollPane = new javax.swing.JScrollPane();
+        editorPane = new javax.swing.JEditorPane();
+        menuBar = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        openButton = new javax.swing.JMenuItem();
+        saveButton = new javax.swing.JMenuItem();
+        runMenu = new javax.swing.JMenu();
+        runButton = new javax.swing.JMenuItem();
+        compileButton = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("C - 0");
+        setBackground(new java.awt.Color(19, 16, 16));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
+        setForeground(new java.awt.Color(51, 51, 51));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 183, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 786, Short.MAX_VALUE)
-        );
+        projectLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        projectLabel.setForeground(new java.awt.Color(51, 51, 51));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1187, Short.MAX_VALUE)
+        javax.swing.GroupLayout projectLabelLayout = new javax.swing.GroupLayout(projectLabel);
+        projectLabel.setLayout(projectLabelLayout);
+        projectLabelLayout.setHorizontalGroup(
+            projectLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 156, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+        projectLabelLayout.setVerticalGroup(
+            projectLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 660, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Save");
-        jMenuBar1.add(jMenu1);
+        messageTab.setBackground(new java.awt.Color(51, 51, 51));
+        Tabs.addTab("Message", messageTab);
+        Tabs.addTab("Tokens", tokenTab);
 
-        jMenu2.setText("Open");
-        jMenuBar1.add(jMenu2);
+        editorPane.setBackground(new java.awt.Color(255, 255, 255));
+        editorPane.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        scrollPane.setViewportView(editorPane);
 
-        jMenu3.setText("Compile");
-        jMenuBar1.add(jMenu3);
+        menuBar.setBackground(new java.awt.Color(51, 51, 51));
+        menuBar.setForeground(new java.awt.Color(51, 51, 51));
+        menuBar.setToolTipText("");
+        menuBar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
 
-        jMenu4.setText("Run");
-        jMenuBar1.add(jMenu4);
+        fileMenu.setText("File");
 
-        setJMenuBar(jMenuBar1);
+        openButton.setText("Open");
+        openButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openButtonActionPerformed(evt);
+            }
+        });
+        fileMenu.add(openButton);
+
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+        fileMenu.add(saveButton);
+
+        menuBar.add(fileMenu);
+
+        runMenu.setText("Run");
+
+        runButton.setText("Run ");
+        runMenu.add(runButton);
+
+        compileButton.setText("Compile");
+        runMenu.add(compileButton);
+
+        menuBar.add(runMenu);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(projectLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Tabs)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(projectLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(scrollPane)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
+        fileChooser.setDialogTitle("Open File");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("TXT files","txt"));
+        int returnValue = fileChooser.showOpenDialog(this);
+        
+        if (returnValue == JFileChooser.APPROVE_OPTION){
+            try{
+                Reader reader = new BufferedReader(new FileReader(fileChooser.getSelectedFile()));
+                messageTab.setText("File successfully loaded");
+                editorPane.read(reader, evt);               
+            }catch (IOException ioe) {
+                messageTab.setText("Failed to load file");
+            }
+        }
+        else {
+            messageTab.setText("No file choosen");
+        }
+    }//GEN-LAST:event_openButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        fileChooser.setDialogTitle("Save File");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("TXT files","txt"));
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String content = editorPane.getText();
+            File file = fileChooser.getSelectedFile();
+            try {
+                FileWriter fw = new FileWriter(file.getPath());
+                fw.write(content);
+                fw.flush();
+                fw.close();
+            } catch (IOException e) {
+                messageTab.setText("Failed to save file");
+            }
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
     
     /**
      * @param args the command line arguments
@@ -149,14 +232,18 @@ public class IDE extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTabbedPane Tabs;
+    private javax.swing.JMenuItem compileButton;
+    private javax.swing.JEditorPane editorPane;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JLabel messageTab;
+    private javax.swing.JMenuItem openButton;
+    private javax.swing.JPanel projectLabel;
+    private javax.swing.JMenuItem runButton;
+    private javax.swing.JMenu runMenu;
+    private javax.swing.JMenuItem saveButton;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JLabel tokenTab;
     // End of variables declaration//GEN-END:variables
 }
