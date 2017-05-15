@@ -21,7 +21,7 @@ import java_cup.runtime.Symbol;
 LETTER= [a-zA-Z]
 DIGIT = [0-9]
 NUMBER = {DIGIT}+
-IDENTIFIER = {LETTER} | _ ({LETTER} | {DIGIT})*
+IDENTIFIER = {LETTER}({DIGIT}|{LETTER})*
 WHITESPACE = [ \r\n\t\f]
 CONSTANT = \"([a-zA-Z0-9]|{WHITESPACE})*\"
 BOOL = "true" | "false"
@@ -32,9 +32,6 @@ BOOL = "true" | "false"
         {WHITESPACE} {/* ignore */}
         {BOOL} {
             return symbol(sym.BOOLEAN, new Boolean(yytext()));
-        }
-        {IDENTIFIER} {
-            return symbol( sym.IDENTIFIER, yytext());
         }
         {NUMBER} {
             return symbol( sym.INTEGER , new Integer(yytext()));
@@ -113,7 +110,10 @@ BOOL = "true" | "false"
         }
         {CONSTANT} {
             return symbol( sym.CONSTANT, yytext());
-        }  	      
+        }  
+        {IDENTIFIER} {
+            return symbol( sym.IDENTIFIER, yytext());
+        }
 }
 . {System.out.print("error! Character not recognized "+yytext());}
 <<EOF>> { System.out.println("Fin");return symbol(sym.EOF);}

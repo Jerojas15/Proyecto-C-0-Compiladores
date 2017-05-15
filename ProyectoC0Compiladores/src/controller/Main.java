@@ -33,7 +33,25 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
         //new Main().preparedFiles();
-        String text= "main(){if(true&&false){puts(\"if verdadero\");}else{if(true){putw(5+6);}}}";
+        String text= "main(){"
+                + "if(true&&false){"
+                + "puts(\"if verdadero\");"
+                + "}else{"
+                + "if(true){putw(5+6);"
+                + "}}"
+                + "while(true){"
+                + "putw(5);"
+                + "}"
+                + "while(true){"
+                + "putw(5);"
+                + "}while(true){"
+                + "break;"
+                + "}while(true){"
+                + "putw(5);"
+                + "}"
+                + "int hola; "
+                + "hola = 5;"
+                + "}";
         Reader in = new BufferedReader(new StringReader(text));
 		Lexer l = new Lexer(in);
                 Parser p = new Parser(new Lexer(in));
