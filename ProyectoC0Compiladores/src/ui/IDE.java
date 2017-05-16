@@ -33,8 +33,8 @@ import steps.Parser;
 public class IDE extends javax.swing.JFrame {
 
     private static JFileChooser fileChooser;
-
-    
+    public static boolean error = false;
+    public static String errMessage = "";
     /**
      * Creates new form IDE
      */
@@ -235,7 +235,11 @@ public class IDE extends javax.swing.JFrame {
             Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
-            messageTab.setText("File successfully compiled");
+            if(!error){
+                messageTab.setText("File successfully compiled");
+            }else{
+                messageTab.setText("Failed to compile file. "+ errMessage);
+            }
             tokenLabel.setText(tokenList);
         }
     }//GEN-LAST:event_compileButtonActionPerformed

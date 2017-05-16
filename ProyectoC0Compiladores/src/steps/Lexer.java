@@ -728,8 +728,7 @@ public class Lexer implements java_cup.runtime.Scanner {
             }
           case 47: break;
           case 18: 
-            { 
-                return sf.newSymbol("IF",sym.IF);
+            { return sf.newSymbol("IF",sym.IF);
             }
           case 48: break;
           case 19: 

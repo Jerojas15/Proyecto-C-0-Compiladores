@@ -1,7 +1,7 @@
 package steps;
 
 import java_cup.runtime.*;
-
+import ui.IDE;
 parser code {:
 
 public void report_error(String message, Object info) {
@@ -19,13 +19,14 @@ public void report_error(String message, Object info) {
         }
 
         m.append(" : "+message);
-
+        IDE.error = true;
+        IDE.errMessage = IDE.errMessage.concat(m+", ");
         System.err.println(m);
     }
 
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
-        System.exit(1);
+        
     }
 
 
@@ -62,17 +63,15 @@ precedence left     ASIGN;
 
 program     ::= MAIN LPAR RPAR LKEY stmtlist:s RKEY {:System.out.println("SI ENTRA");RESULT = (Boolean)true;   :};
 
-stmtlist    ::= stmt:s stmtlist:sl                          {://RESULT = s;:}
-                |stmt:s                                     {://RESULT = s;:}
+stmtlist    ::= stmtlist:sl stmt:s                           {://RESULT = s;:}
+                | stmt:s                                     {://RESULT = s;:}
                 ;
 
-stmt    ::=    IF LPAR cond:c RPAR LKEY stmt:s RKEY                             {: //if((Boolean)c){RESULT = s;}:}
-                | IF LPAR cond:c RPAR LKEY stmt:s RKEY ELSE LKEY stmt:s2 RKEY    {: //RESULT = ((Boolean)c)?s:s2;:}
-                | WHILE LPAR cond:c RPAR LKEY stmt:s RKEY
-                | expr:s                                                         {://RESULT = s;:}
-                ;
-
-expr    ::=     ope:e                {://RESULT = e;:}
+stmt    ::=     ope:e                          {::}
+                | LKEY stmtlist:s RKEY               {::}
+                | IF LPAR cond:c RPAR stmt:s                             {: //if((Boolean)c){RESULT = s;}:}
+                | IF LPAR cond:c RPAR stmt:s ELSE stmt:s2    {: //RESULT = ((Boolean)c)?s:s2;:}
+                | WHILE LPAR cond:c RPAR stmt:s
                 | PUTS LPAR CONSTANT:c RPAR SEMICOLON                           {: //System.out.println("String "+(String)c);:}
                 | PUTW LPAR ope:e RPAR SEMICOLON                                {: //System.out.println("int "+(Integer)e);:}
                 | BREAK SEMICOLON {::}
