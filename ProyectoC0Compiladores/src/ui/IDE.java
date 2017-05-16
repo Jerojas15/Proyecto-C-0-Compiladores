@@ -12,8 +12,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
+import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import steps.Lexer;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ScannerBuffer;
+import java_cup.runtime.SymbolFactory;
+import steps.Parser;
 //import steps.Lexer;
 
 /**
@@ -30,9 +40,9 @@ public class IDE extends javax.swing.JFrame {
      */
     public IDE() {
         initComponents();
-        this.getContentPane().setBackground(new Color(19,16,16));      
-        this.projectLabel.setBackground(new Color(51,51,51));
-        this.Tabs.setBackground(new Color(153,153,153));
+        //this.getContentPane().setBackground(new Color(19,16,16));      
+        //this.projectLabel.setBackground(new Color(51,51,51));
+        //this.Tabs.setBackground(new Color(153,153,153));
         //this.editorPane.setBackground(Color.red);
         
         fileChooser = new JFileChooser();
@@ -50,7 +60,8 @@ public class IDE extends javax.swing.JFrame {
         projectLabel = new javax.swing.JPanel();
         Tabs = new javax.swing.JTabbedPane();
         messageTab = new javax.swing.JLabel();
-        tokenTab = new javax.swing.JLabel();
+        tokenTab = new javax.swing.JScrollPane();
+        tokenLabel = new javax.swing.JLabel();
         scrollPane = new javax.swing.JScrollPane();
         editorPane = new javax.swing.JEditorPane();
         menuBar = new javax.swing.JMenuBar();
@@ -82,8 +93,13 @@ public class IDE extends javax.swing.JFrame {
             .addGap(0, 660, Short.MAX_VALUE)
         );
 
-        messageTab.setBackground(new java.awt.Color(51, 51, 51));
+        Tabs.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+
+        messageTab.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         Tabs.addTab("Message", messageTab);
+
+        tokenTab.setViewportView(tokenLabel);
+
         Tabs.addTab("Tokens", tokenTab);
 
         editorPane.setBackground(new java.awt.Color(255, 255, 255));
@@ -121,6 +137,11 @@ public class IDE extends javax.swing.JFrame {
         runMenu.add(runButton);
 
         compileButton.setText("Compile");
+        compileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                compileButtonActionPerformed(evt);
+            }
+        });
         runMenu.add(compileButton);
 
         menuBar.add(runMenu);
@@ -192,6 +213,32 @@ public class IDE extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void compileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileButtonActionPerformed
+        String tokenList = "";
+        try{
+            SymbolFactory symbolFactory = new ComplexSymbolFactory();
+            String content = editorPane.getText();             
+            Lexer lexer = new Lexer(new StringReader(content),symbolFactory);
+            ScannerBuffer buffer = new ScannerBuffer(lexer);
+            Parser p = new Parser(buffer,new ComplexSymbolFactory());
+            p.parse();
+            //System.out.println(buffer.getBuffered());
+            for(Symbol symbol : buffer.getBuffered()){
+                tokenList += symbol.toString();
+                tokenList += "\n";
+            }
+            //tokenList += buffer.getBuffered().stream().map((symbol) -> (symbol.toString()+"\n")).reduce(tokenList, String::concat);  
+        }catch (IOException ioe) {
+            messageTab.setText("Failed to compile file");
+        } catch (Exception ex) {
+            Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            messageTab.setText("File successfully compiled");
+            tokenLabel.setText(tokenList);
+        }
+    }//GEN-LAST:event_compileButtonActionPerformed
     
     /**
      * @param args the command line arguments
@@ -244,6 +291,7 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenu runMenu;
     private javax.swing.JMenuItem saveButton;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JLabel tokenTab;
+    private javax.swing.JLabel tokenLabel;
+    private javax.swing.JScrollPane tokenTab;
     // End of variables declaration//GEN-END:variables
 }
