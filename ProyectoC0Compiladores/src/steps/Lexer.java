@@ -35,13 +35,13 @@ public class Lexer implements java_cup.runtime.Scanner {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\1\3\1\3\1\44\1\3\1\3\22\0\1\3\1\0\1\4"+
-    "\3\0\1\43\1\0\1\25\1\26\1\34\1\32\1\0\1\33\1\0"+
-    "\1\35\12\2\1\0\1\31\1\36\1\40\1\37\2\0\32\1\6\0"+
-    "\1\12\1\23\2\1\1\10\1\11\1\1\1\21\1\16\1\1\1\24"+
-    "\1\13\1\15\1\17\1\1\1\22\1\1\1\6\1\14\1\5\1\7"+
-    "\1\1\1\20\3\1\1\27\1\42\1\30\7\0\1\44\33\0\1\41"+
-    "\u1f86\0\1\44\1\44\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+    "\11\0\1\4\1\4\1\45\1\4\1\4\22\0\1\4\1\3\1\5"+
+    "\3\0\1\44\1\0\1\26\1\27\1\35\1\33\1\3\1\34\1\3"+
+    "\1\36\12\2\1\3\1\32\1\37\1\41\1\40\2\0\32\1\1\0"+
+    "\1\3\4\0\1\13\1\24\2\1\1\11\1\12\1\1\1\22\1\17"+
+    "\1\1\1\25\1\14\1\16\1\20\1\1\1\23\1\1\1\7\1\15"+
+    "\1\6\1\10\1\1\1\21\3\1\1\30\1\43\1\31\7\0\1\45"+
+    "\33\0\1\42\u1f86\0\1\45\1\45\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
   /** 
    * Translates characters to character classes
@@ -87,14 +87,14 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\45\0\112\0\157\0\45\0\224\0\271\0\336"+
-    "\0\u0103\0\u0128\0\u014d\0\u0172\0\u0197\0\u01bc\0\45\0\45"+
-    "\0\45\0\45\0\45\0\45\0\45\0\45\0\45\0\45"+
-    "\0\45\0\u01e1\0\u0206\0\u022b\0\u0250\0\224\0\45\0\u0275"+
-    "\0\u029a\0\u02bf\0\u02e4\0\112\0\u0309\0\u032e\0\u0353\0\u0378"+
-    "\0\45\0\45\0\45\0\45\0\u039d\0\u03c2\0\u03e7\0\u040c"+
-    "\0\112\0\u0431\0\u0456\0\u047b\0\112\0\112\0\112\0\u04a0"+
-    "\0\112\0\112\0\u04c5\0\112\0\112";
+    "\0\0\0\46\0\114\0\162\0\46\0\230\0\276\0\344"+
+    "\0\u010a\0\u0130\0\u0156\0\u017c\0\u01a2\0\u01c8\0\46\0\46"+
+    "\0\46\0\46\0\46\0\46\0\46\0\46\0\46\0\46"+
+    "\0\46\0\u01ee\0\u0214\0\u023a\0\u0260\0\230\0\46\0\u0286"+
+    "\0\u02ac\0\u02d2\0\u02f8\0\114\0\u031e\0\u0344\0\u036a\0\u0390"+
+    "\0\46\0\46\0\46\0\46\0\u03b6\0\u03dc\0\u0402\0\u0428"+
+    "\0\114\0\u044e\0\u0474\0\u049a\0\114\0\114\0\114\0\u04c0"+
+    "\0\114\0\114\0\u04e6\0\114\0\114";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[61];
@@ -120,35 +120,35 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\1\3\1\4\1\5\1\6\1\7\2\3\1\10"+
-    "\1\11\3\3\1\12\1\13\1\3\1\14\1\3\1\15"+
-    "\1\16\1\3\1\17\1\20\1\21\1\22\1\23\1\24"+
-    "\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\34"+
-    "\1\35\47\0\2\3\2\0\20\3\22\0\1\4\43\0"+
-    "\3\36\1\37\20\36\21\0\2\3\2\0\1\3\1\40"+
-    "\16\3\21\0\2\3\2\0\6\3\1\41\11\3\21\0"+
-    "\2\3\2\0\5\3\1\42\12\3\21\0\2\3\2\0"+
-    "\5\3\1\43\12\3\21\0\2\3\2\0\4\3\1\44"+
-    "\5\3\1\45\5\3\21\0\2\3\2\0\14\3\1\46"+
-    "\3\3\21\0\2\3\2\0\2\3\1\47\15\3\21\0"+
-    "\2\3\2\0\1\3\1\50\16\3\60\0\1\51\44\0"+
-    "\1\52\46\0\1\53\45\0\1\54\2\0\2\3\2\0"+
-    "\2\3\1\55\15\3\21\0\2\3\2\0\7\3\1\56"+
-    "\10\3\21\0\2\3\2\0\6\3\1\57\11\3\21\0"+
-    "\2\3\2\0\11\3\1\60\6\3\21\0\2\3\2\0"+
-    "\1\61\17\3\21\0\2\3\2\0\11\3\1\62\6\3"+
-    "\21\0\2\3\2\0\1\63\17\3\21\0\2\3\2\0"+
-    "\3\3\1\64\14\3\21\0\2\3\2\0\3\3\1\65"+
-    "\14\3\21\0\2\3\2\0\3\3\1\66\14\3\21\0"+
-    "\2\3\2\0\7\3\1\55\10\3\21\0\2\3\2\0"+
-    "\12\3\1\67\5\3\21\0\2\3\2\0\6\3\1\70"+
-    "\11\3\21\0\2\3\2\0\7\3\1\71\3\3\1\72"+
-    "\4\3\21\0\2\3\2\0\5\3\1\73\12\3\21\0"+
-    "\2\3\2\0\3\3\1\74\14\3\21\0\2\3\2\0"+
-    "\17\3\1\75\20\0";
+    "\1\2\1\3\1\4\1\2\1\5\1\6\1\7\2\3"+
+    "\1\10\1\11\3\3\1\12\1\13\1\3\1\14\1\3"+
+    "\1\15\1\16\1\3\1\17\1\20\1\21\1\22\1\23"+
+    "\1\24\1\25\1\26\1\27\1\30\1\31\1\32\1\33"+
+    "\1\34\1\35\50\0\2\3\3\0\20\3\22\0\1\4"+
+    "\44\0\4\36\1\37\20\36\4\0\10\36\5\0\2\3"+
+    "\3\0\1\3\1\40\16\3\21\0\2\3\3\0\6\3"+
+    "\1\41\11\3\21\0\2\3\3\0\5\3\1\42\12\3"+
+    "\21\0\2\3\3\0\5\3\1\43\12\3\21\0\2\3"+
+    "\3\0\4\3\1\44\5\3\1\45\5\3\21\0\2\3"+
+    "\3\0\14\3\1\46\3\3\21\0\2\3\3\0\2\3"+
+    "\1\47\15\3\21\0\2\3\3\0\1\3\1\50\16\3"+
+    "\61\0\1\51\45\0\1\52\47\0\1\53\46\0\1\54"+
+    "\2\0\2\3\3\0\2\3\1\55\15\3\21\0\2\3"+
+    "\3\0\7\3\1\56\10\3\21\0\2\3\3\0\6\3"+
+    "\1\57\11\3\21\0\2\3\3\0\11\3\1\60\6\3"+
+    "\21\0\2\3\3\0\1\61\17\3\21\0\2\3\3\0"+
+    "\11\3\1\62\6\3\21\0\2\3\3\0\1\63\17\3"+
+    "\21\0\2\3\3\0\3\3\1\64\14\3\21\0\2\3"+
+    "\3\0\3\3\1\65\14\3\21\0\2\3\3\0\3\3"+
+    "\1\66\14\3\21\0\2\3\3\0\7\3\1\55\10\3"+
+    "\21\0\2\3\3\0\12\3\1\67\5\3\21\0\2\3"+
+    "\3\0\6\3\1\70\11\3\21\0\2\3\3\0\7\3"+
+    "\1\71\3\3\1\72\4\3\21\0\2\3\3\0\5\3"+
+    "\1\73\12\3\21\0\2\3\3\0\3\3\1\74\14\3"+
+    "\21\0\2\3\3\0\17\3\1\75\20\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[1258];
+    int [] result = new int[1292];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -293,7 +293,7 @@ public class Lexer implements java_cup.runtime.Scanner {
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 160) {
+    while (i < 164) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
@@ -664,11 +664,11 @@ public class Lexer implements java_cup.runtime.Scanner {
             }
           case 31: break;
           case 2: 
-            { return sf.newSymbol("IDENTIFIER",sym.IDENTIFIER, yytext());
+            { return sf.newSymbol("IDENTIFIER ",sym.IDENTIFIER, yytext());
             }
           case 32: break;
           case 3: 
-            { return sf.newSymbol("INTEGER",sym.INTEGER,new Integer(yytext()));
+            { return sf.newSymbol("INTEGER ",sym.INTEGER,new Integer(yytext()));
             }
           case 33: break;
           case 4: 
@@ -676,107 +676,107 @@ public class Lexer implements java_cup.runtime.Scanner {
             }
           case 34: break;
           case 5: 
-            { return sf.newSymbol("LPAR",sym.LPAR);
+            { return sf.newSymbol("LPAR ",sym.LPAR);
             }
           case 35: break;
           case 6: 
-            { return sf.newSymbol("RPAR",sym.RPAR);
+            { return sf.newSymbol("RPAR ",sym.RPAR);
             }
           case 36: break;
           case 7: 
-            { return sf.newSymbol("LKEY",sym.LKEY);
+            { return sf.newSymbol("LKEY ",sym.LKEY);
             }
           case 37: break;
           case 8: 
-            { return sf.newSymbol("RKEY",sym.RKEY);
+            { return sf.newSymbol("RKEY ",sym.RKEY);
             }
           case 38: break;
           case 9: 
-            { return sf.newSymbol("SEMICOLON",sym.SEMICOLON);
+            { return sf.newSymbol("SEMICOLON ",sym.SEMICOLON);
             }
           case 39: break;
           case 10: 
-            { return sf.newSymbol("PLUS",sym.PLUS);
+            { return sf.newSymbol("PLUS ",sym.PLUS);
             }
           case 40: break;
           case 11: 
-            { return sf.newSymbol("MINUS",sym.MINUS);
+            { return sf.newSymbol("MINUS ",sym.MINUS);
             }
           case 41: break;
           case 12: 
-            { return sf.newSymbol("TIMES",sym.TIMES);
+            { return sf.newSymbol("TIMES ",sym.TIMES);
             }
           case 42: break;
           case 13: 
-            { return sf.newSymbol("DIVIDE",sym.DIVIDE);
+            { return sf.newSymbol("DIVIDE ",sym.DIVIDE);
             }
           case 43: break;
           case 14: 
-            { return sf.newSymbol("LESS",sym.LESS);
+            { return sf.newSymbol("LESS ",sym.LESS);
             }
           case 44: break;
           case 15: 
-            { return sf.newSymbol("MORE",sym.MORE);
+            { return sf.newSymbol("MORE ",sym.MORE);
             }
           case 45: break;
           case 16: 
-            { return sf.newSymbol("ASIGN",sym.ASIGN);
+            { return sf.newSymbol("ASIGN ",sym.ASIGN);
             }
           case 46: break;
           case 17: 
-            { return sf.newSymbol("CONSTANT",sym.CONSTANT,yytext());
+            { return sf.newSymbol("CONSTANT ",sym.CONSTANT,yytext());
             }
           case 47: break;
           case 18: 
-            { return sf.newSymbol("IF",sym.IF);
+            { return sf.newSymbol("IF ",sym.IF);
             }
           case 48: break;
           case 19: 
-            { return sf.newSymbol("EQUAL",sym.EQUAL);
+            { return sf.newSymbol("EQUAL ",sym.EQUAL);
             }
           case 49: break;
           case 20: 
-            { return sf.newSymbol("NOTEQUAL",sym.NOTEQUAL);
+            { return sf.newSymbol("NOTEQUAL ",sym.NOTEQUAL);
             }
           case 50: break;
           case 21: 
-            { return sf.newSymbol("OR",sym.OR);
+            { return sf.newSymbol("OR ",sym.OR);
             }
           case 51: break;
           case 22: 
-            { return sf.newSymbol("AND",sym.AND);
+            { return sf.newSymbol("AND ",sym.AND);
             }
           case 52: break;
           case 23: 
-            { return sf.newSymbol("INT",sym.INT);
+            { return sf.newSymbol("INT ",sym.INT);
             }
           case 53: break;
           case 24: 
-            { return sf.newSymbol("BOOLEAN",sym.BOOLEAN, new Boolean(yytext()));
+            { return sf.newSymbol("BOOLEAN ",sym.BOOLEAN, new Boolean(yytext()));
             }
           case 54: break;
           case 25: 
-            { return sf.newSymbol("ELSE",sym.ELSE);
+            { return sf.newSymbol("ELSE ",sym.ELSE);
             }
           case 55: break;
           case 26: 
-            { return sf.newSymbol("MAIN",sym.MAIN);
+            { return sf.newSymbol("MAIN ",sym.MAIN);
             }
           case 56: break;
           case 27: 
-            { return sf.newSymbol("PUTS",sym.PUTS);
+            { return sf.newSymbol("PUTS ",sym.PUTS);
             }
           case 57: break;
           case 28: 
-            { return sf.newSymbol("PUTW",sym.PUTW);
+            { return sf.newSymbol("PUTW ",sym.PUTW);
             }
           case 58: break;
           case 29: 
-            { return sf.newSymbol("WHILE",sym.WHILE);
+            { return sf.newSymbol("WHILE ",sym.WHILE);
             }
           case 59: break;
           case 30: 
-            { return sf.newSymbol("BREAK",sym.BREAK);
+            { return sf.newSymbol("BREAK ",sym.BREAK);
             }
           case 60: break;
           default:

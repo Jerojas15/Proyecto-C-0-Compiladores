@@ -25,9 +25,10 @@ import java_cup.runtime.SymbolFactory;
 LETTER= [a-zA-Z]
 DIGIT = [0-9]
 NUMBER = {DIGIT}+
+SYMBOLS = [!*\\\:+-=<>,.;:/]
 IDENTIFIER = {LETTER}({DIGIT}|{LETTER})*
 WHITESPACE = [ \r\n\t\f]
-CONSTANT = \"([a-zA-Z0-9]|{WHITESPACE})*\"
+CONSTANT = \"([a-zA-Z0-9]|{WHITESPACE}|{SYMBOLS})*\"
 BOOL = "true" | "false"
 
 %%
@@ -35,88 +36,88 @@ BOOL = "true" | "false"
         
         {WHITESPACE} {/* ignore */}
         {BOOL} {
-            return sf.newSymbol("BOOLEAN",sym.BOOLEAN, new Boolean(yytext()));
+            return sf.newSymbol("BOOLEAN ",sym.BOOLEAN, new Boolean(yytext()));
         }
         {NUMBER} {
-            return sf.newSymbol("INTEGER",sym.INTEGER,new Integer(yytext()));
+            return sf.newSymbol("INTEGER ",sym.INTEGER,new Integer(yytext()));
         }
         "main" { 
-            return sf.newSymbol("MAIN",sym.MAIN);
+            return sf.newSymbol("MAIN ",sym.MAIN);
         }
         "if" { 
-            return sf.newSymbol("IF",sym.IF);
+            return sf.newSymbol("IF ",sym.IF);
         }
         "while" { 
-            return sf.newSymbol("WHILE",sym.WHILE);
+            return sf.newSymbol("WHILE ",sym.WHILE);
         }
         "else" { 
-            return sf.newSymbol("ELSE",sym.ELSE);
+            return sf.newSymbol("ELSE ",sym.ELSE);
         }
         "putw" { 
-            return sf.newSymbol("PUTW",sym.PUTW);
+            return sf.newSymbol("PUTW ",sym.PUTW);
         }
         "puts" { 
-            return sf.newSymbol("PUTS",sym.PUTS);
+            return sf.newSymbol("PUTS ",sym.PUTS);
         }
         "int" { 
-            return sf.newSymbol("INT",sym.INT);
+            return sf.newSymbol("INT ",sym.INT);
         }
         "break" { 
-            return sf.newSymbol("BREAK",sym.BREAK);
+            return sf.newSymbol("BREAK ",sym.BREAK);
         }
         "(" { 
-            return sf.newSymbol("LPAR",sym.LPAR);
+            return sf.newSymbol("LPAR ",sym.LPAR);
         }
         ")" { 
-            return sf.newSymbol("RPAR",sym.RPAR);
+            return sf.newSymbol("RPAR ",sym.RPAR);
         }
         "{" { 
-            return sf.newSymbol("LKEY",sym.LKEY);
+            return sf.newSymbol("LKEY ",sym.LKEY);
         }
         "}" { 
-            return sf.newSymbol("RKEY",sym.RKEY);
+            return sf.newSymbol("RKEY ",sym.RKEY);
         }
         ";" { 
-            return sf.newSymbol("SEMICOLON",sym.SEMICOLON);
+            return sf.newSymbol("SEMICOLON ",sym.SEMICOLON);
         }
         "+" { 
-            return sf.newSymbol("PLUS",sym.PLUS);
+            return sf.newSymbol("PLUS ",sym.PLUS);
         }
         "-" { 
-            return sf.newSymbol("MINUS",sym.MINUS);
+            return sf.newSymbol("MINUS ",sym.MINUS);
         }
         "*" { 
-            return sf.newSymbol("TIMES",sym.TIMES);
+            return sf.newSymbol("TIMES ",sym.TIMES);
         }
         "/" { 
-            return sf.newSymbol("DIVIDE",sym.DIVIDE);
+            return sf.newSymbol("DIVIDE ",sym.DIVIDE);
         }
         "<" { 
-            return sf.newSymbol("LESS",sym.LESS);
+            return sf.newSymbol("LESS ",sym.LESS);
         }
         ">" { 
-            return sf.newSymbol("MORE",sym.MORE);
+            return sf.newSymbol("MORE ",sym.MORE);
         }
         "==" { 
-            return sf.newSymbol("EQUAL",sym.EQUAL);
+            return sf.newSymbol("EQUAL ",sym.EQUAL);
         }
         "¡=" { 
-            return sf.newSymbol("NOTEQUAL",sym.NOTEQUAL);
+            return sf.newSymbol("NOTEQUAL ",sym.NOTEQUAL);
         }
         "||" { 
-            return sf.newSymbol("OR",sym.OR);
+            return sf.newSymbol("OR ",sym.OR);
         }
         "&&" { 
-            return sf.newSymbol("AND",sym.AND);
+            return sf.newSymbol("AND ",sym.AND);
         }
         "=" { 
-            return sf.newSymbol("ASIGN",sym.ASIGN);
+            return sf.newSymbol("ASIGN ",sym.ASIGN);
         }
         {CONSTANT} {
-            return sf.newSymbol("CONSTANT",sym.CONSTANT,yytext());
+            return sf.newSymbol("CONSTANT ",sym.CONSTANT,yytext());
         }  
         {IDENTIFIER} {
-            return sf.newSymbol("IDENTIFIER",sym.IDENTIFIER, yytext());
+            return sf.newSymbol("IDENTIFIER ",sym.IDENTIFIER, yytext());
         }
 }
 . {System.out.print("error! Character not recognized "+yytext());}
