@@ -271,6 +271,11 @@ public class Lexer implements java_cup.runtime.Scanner {
 		this.sf=sf;
 	}
 	private SymbolFactory sf;
+        
+        private void error(String message) {
+            System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
+        }
+
 
 
   /**
@@ -664,11 +669,11 @@ public class Lexer implements java_cup.runtime.Scanner {
             }
           case 31: break;
           case 2: 
-            { return sf.newSymbol("IDENTIFIER ",sym.IDENTIFIER, yytext());
+            { return sf.newSymbol("IDENTIFIER",sym.IDENTIFIER, yytext());
             }
           case 32: break;
           case 3: 
-            { return sf.newSymbol("INTEGER ",sym.INTEGER,new Integer(yytext()));
+            { return sf.newSymbol("INTEGER",sym.INTEGER,new Integer(yytext()));
             }
           case 33: break;
           case 4: 
@@ -676,107 +681,107 @@ public class Lexer implements java_cup.runtime.Scanner {
             }
           case 34: break;
           case 5: 
-            { return sf.newSymbol("LPAR ",sym.LPAR);
+            { return sf.newSymbol("LPAR",sym.LPAR);
             }
           case 35: break;
           case 6: 
-            { return sf.newSymbol("RPAR ",sym.RPAR);
+            { return sf.newSymbol("RPAR",sym.RPAR);
             }
           case 36: break;
           case 7: 
-            { return sf.newSymbol("LKEY ",sym.LKEY);
+            { return sf.newSymbol("LKEY",sym.LKEY);
             }
           case 37: break;
           case 8: 
-            { return sf.newSymbol("RKEY ",sym.RKEY);
+            { return sf.newSymbol("RKEY",sym.RKEY);
             }
           case 38: break;
           case 9: 
-            { return sf.newSymbol("SEMICOLON ",sym.SEMICOLON);
+            { return sf.newSymbol("SEMICOLON",sym.SEMICOLON);
             }
           case 39: break;
           case 10: 
-            { return sf.newSymbol("PLUS ",sym.PLUS);
+            { return sf.newSymbol("PLUS",sym.PLUS);
             }
           case 40: break;
           case 11: 
-            { return sf.newSymbol("MINUS ",sym.MINUS);
+            { return sf.newSymbol("MINUS",sym.MINUS);
             }
           case 41: break;
           case 12: 
-            { return sf.newSymbol("TIMES ",sym.TIMES);
+            { return sf.newSymbol("TIMES",sym.TIMES);
             }
           case 42: break;
           case 13: 
-            { return sf.newSymbol("DIVIDE ",sym.DIVIDE);
+            { return sf.newSymbol("DIVIDE",sym.DIVIDE);
             }
           case 43: break;
           case 14: 
-            { return sf.newSymbol("LESS ",sym.LESS);
+            { return sf.newSymbol("LESS",sym.LESS);
             }
           case 44: break;
           case 15: 
-            { return sf.newSymbol("MORE ",sym.MORE);
+            { return sf.newSymbol("MORE",sym.MORE);
             }
           case 45: break;
           case 16: 
-            { return sf.newSymbol("ASIGN ",sym.ASIGN);
+            { return sf.newSymbol("ASIGN",sym.ASIGN);
             }
           case 46: break;
           case 17: 
-            { return sf.newSymbol("CONSTANT ",sym.CONSTANT,yytext());
+            { return sf.newSymbol("CONSTANT",sym.CONSTANT,yytext());
             }
           case 47: break;
           case 18: 
-            { return sf.newSymbol("IF ",sym.IF);
+            { return sf.newSymbol("IF",sym.IF);
             }
           case 48: break;
           case 19: 
-            { return sf.newSymbol("EQUAL ",sym.EQUAL);
+            { return sf.newSymbol("EQUAL",sym.EQUAL);
             }
           case 49: break;
           case 20: 
-            { return sf.newSymbol("NOTEQUAL ",sym.NOTEQUAL);
+            { return sf.newSymbol("NOTEQUAL",sym.NOTEQUAL);
             }
           case 50: break;
           case 21: 
-            { return sf.newSymbol("OR ",sym.OR);
+            { return sf.newSymbol("OR",sym.OR);
             }
           case 51: break;
           case 22: 
-            { return sf.newSymbol("AND ",sym.AND);
+            { return sf.newSymbol("AND",sym.AND);
             }
           case 52: break;
           case 23: 
-            { return sf.newSymbol("INT ",sym.INT);
+            { return sf.newSymbol("INT",sym.INT);
             }
           case 53: break;
           case 24: 
-            { return sf.newSymbol("BOOLEAN ",sym.BOOLEAN, new Boolean(yytext()));
+            { return sf.newSymbol("BOOLEAN",sym.BOOLEAN, new Boolean(yytext()));
             }
           case 54: break;
           case 25: 
-            { return sf.newSymbol("ELSE ",sym.ELSE);
+            { return sf.newSymbol("ELSE",sym.ELSE);
             }
           case 55: break;
           case 26: 
-            { return sf.newSymbol("MAIN ",sym.MAIN);
+            { return sf.newSymbol("MAIN",sym.MAIN);
             }
           case 56: break;
           case 27: 
-            { return sf.newSymbol("PUTS ",sym.PUTS);
+            { return sf.newSymbol("PUTS",sym.PUTS);
             }
           case 57: break;
           case 28: 
-            { return sf.newSymbol("PUTW ",sym.PUTW);
+            { return sf.newSymbol("PUTW",sym.PUTW);
             }
           case 58: break;
           case 29: 
-            { return sf.newSymbol("WHILE ",sym.WHILE);
+            { return sf.newSymbol("WHILE",sym.WHILE);
             }
           case 59: break;
           case 30: 
-            { return sf.newSymbol("BREAK ",sym.BREAK);
+            { return sf.newSymbol("BREAK",sym.BREAK);
             }
           case 60: break;
           default:

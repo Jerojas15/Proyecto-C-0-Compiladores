@@ -54,7 +54,7 @@ public class Main {
                 + "}";
         Reader in = new BufferedReader(new StringReader(text));
 		Lexer l = new Lexer(in);
-                Parser p = new Parser(new Lexer(in));
+                Parser p = new Parser(new Lexer(in),new ComplexSymbolFactory());
                 Object result = p.parse().value;
                 System.out.println(result);
     */}
