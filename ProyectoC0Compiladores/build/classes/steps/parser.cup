@@ -28,6 +28,12 @@ non terminal        varlist;
 non terminal        var;
 non terminal        stmtlist;
 non terminal        stmt;
+non terminal        ifstmt;
+non terminal        whilestmt;
+non terminal        asignstmt;
+non terminal        putwstmt;
+non terminal        putsstmt;
+non terminal        breakstmt;
 non terminal        cond;
 non terminal        ope;
 
@@ -62,7 +68,7 @@ var     ::= INT IDENTIFIER SEMICOLON                                            
 stmtlist::= stmtlist stmt                                                       {://RESULT = s;:}
             | stmt                                                              {://RESULT = s;:}
             ;
-
+/*
 stmt    ::= IF LPAR cond RPAR LKEY stmtlist RKEY 
             | IF LPAR cond RPAR LKEY stmtlist RKEY RPAR ELSE LKEY stmtlist RKEY
             | WHILE LPAR cond RPAR LKEY stmtlist RKEY
@@ -71,6 +77,29 @@ stmt    ::= IF LPAR cond RPAR LKEY stmtlist RKEY
             | BREAK SEMICOLON                                                   {::}
             | IDENTIFIER ASIGN ope:e SEMICOLON                                  {::}
             ;
+*/
+stmt    ::= ifstmt
+            | whilestmt
+            | asignstmt
+            | putwstmt
+            | putsstmt
+            | breakstmt
+            ;
+
+ifstmt      ::= IF LPAR cond RPAR LKEY stmtlist RKEY ELSE LKEY stmtlist RKEY
+                | IF LPAR cond RPAR LKEY stmtlist RKEY  
+                ;
+whilestmt   ::= WHILE LPAR cond RPAR 
+                LKEY stmtlist RKEY
+                ;
+asignstmt   ::= IDENTIFIER ASIGN ope:e SEMICOLON
+                ;
+putwstmt    ::= PUTW LPAR ope:e RPAR SEMICOLON
+               ;
+putsstmt    ::= PUTS LPAR CONSTANT:c RPAR SEMICOLON
+                ;
+breakstmt   ::= BREAK SEMICOLON
+                ;
 
 ope     ::= ope:e1 PLUS  ope:e2                                                 {: //RESULT = (Integer)e1+(Integer)e2;       :}
             | ope:e1 MINUS ope:e2                                               {: //RESULT = (Integer)e1-(Integer)e2;       :}
