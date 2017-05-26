@@ -8,33 +8,7 @@ parser code {:
         System.out.println("Compiler has detected a syntax error at line " + s.left 
             + " column " + s.right);
     }
-
-    public void unrecovered_syntax_error(Symbol s) throws  java.lang.Exception 
-    {   
-    }
-    public void report_error(String message, Object info) {
-
-            /* Create a StringBuilder called 'm' with the string 'Error' in it. */
-            StringBuilder m = new StringBuilder("Error");
-            if (info instanceof java_cup.runtime.Symbol) {
-                java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
-                if (s.left >= 0) {                
-                    m.append(" in line "+(s.left+1));   
-                    if (s.right >= 0)                    
-                        m.append(", column "+(s.right+1));
-                        m.append(", value: "+ s.value);
-                }
-            }
-
-            m.append(" : "+message);
-            IDE.error = true;
-            IDE.errMessage = IDE.errMessage.concat(m+", ");
-            System.err.println(m);
-    }
-
-    public void report_fatal_error(String message, Object info) {
-        report_error(message, info);       
-    }
+    
 :};
 
 /* Terminals and Non Terminals */ 
@@ -45,10 +19,11 @@ terminal            AND, OR, ASIGN;
 terminal            LPAR, RPAR, SEMICOLON, RKEY, LKEY;
 terminal            CONSTANT, IDENTIFIER;
 terminal            MAIN, IF, WHILE, PUTS, PUTW, INT, BREAK, ELSE;
-terminal Integer    INTEGER;
+terminal Integer    NUMBER;
 terminal Boolean    BOOLEAN;
 
 non terminal        program;
+non terminal        body;
 non terminal        varlist;
 non terminal        var;
 non terminal        stmtlist;
@@ -70,52 +45,49 @@ precedence left     ELSE;
 
 /* Grammar Rules */ 
 
-program     ::=  varlist MAIN LPAR RPAR LKEY stmtlist:s RKEY                     {:RESULT = (Boolean)true;   :}
-                | MAIN LPAR RPAR LKEY stmtlist:s RKEY                            {:RESULT = (Boolean)true;   :}
-                | error:e
-                ;
+program ::= varlist body
+            | body
+            ;
 
-varlist     ::= varlist var
-                | var
-                ;
+body    ::= MAIN LPAR RPAR LKEY stmtlist:s RKEY                                 {:RESULT = (Boolean)true;   :}
+            ;
 
-var         ::= INT IDENTIFIER SEMICOLON  {::};
+varlist ::= varlist var
+            | var
+            ;
 
-stmtlist    ::= stmtlist:sl stmt:s                                              {://RESULT = s;:}
-                | stmt:s                                                        {://RESULT = s;:}
-                ;
+var     ::= INT IDENTIFIER SEMICOLON                                            {::}
+            ;
 
-stmt    ::=     ope                                                           
-                | LKEY stmtlist RKEY                                          
-                | IF LPAR cond RPAR stmt ELSE stmt                      
-                | IF LPAR cond RPAR stmt                                   
-                | WHILE LPAR cond:c RPAR stmt:s
-                | PUTS LPAR CONSTANT:c RPAR SEMICOLON                           {: //System.out.println("String "+(String)c);:}
-                | PUTW LPAR ope:e RPAR SEMICOLON                                {: //System.out.println("int "+(Integer)e);:}
-                | BREAK SEMICOLON {::}
-                | IDENTIFIER ASIGN ope:e SEMICOLON                              {::}
-                | var
-                | error:e
-                ;
+stmtlist::= stmtlist stmt                                                       {://RESULT = s;:}
+            | stmt                                                              {://RESULT = s;:}
+            ;
 
-ope     ::=      LPAR ope:e RPAR                                                {: //RESULT = e;                             :}
-                | ope:e1 PLUS  ope:e2                                           {: //RESULT = (Integer)e1+(Integer)e2;       :}
-                | ope:e1 MINUS ope:e2                                           {: //RESULT = (Integer)e1-(Integer)e2;       :}
-                | ope:e1 TIMES ope:e2                                           {: //RESULT = (Integer)e1*(Integer)e2;       :}
-                | ope:e1 DIVIDE ope:e2                                          {: //RESULT = (Integer)e1/(Integer)e2;       :}
-                | MINUS ope:e                                                   {: //RESULT = new Integer(0-(Integer)e);     :}
-                | INTEGER:n                                                     {: //RESULT = n;                             :}
-                | IDENTIFIER:n                                                  {::}
-                ;
+stmt    ::= IF LPAR cond RPAR LKEY stmtlist RKEY 
+            | IF LPAR cond RPAR LKEY stmtlist RKEY RPAR ELSE LKEY stmtlist RKEY
+            | WHILE LPAR cond RPAR LKEY stmtlist RKEY
+            | PUTS LPAR CONSTANT:c RPAR SEMICOLON                               {: //System.out.println("String "+(String)c);:}
+            | PUTW LPAR ope:e RPAR SEMICOLON                                    {: //System.out.println("int "+(Integer)e);  :}
+            | BREAK SEMICOLON                                                   {::}
+            | IDENTIFIER ASIGN ope:e SEMICOLON                                  {::}
+            ;
 
-cond    ::=     BOOLEAN:n                                                       {: //RESULT = n;                                                      :}
-                | LPAR cond:e RPAR                                              {: //RESULT = e;                                                      :}
-                | cond:e1 AND cond:e2                                           {: //RESULT = (Boolean)e1 && (Boolean)e2;                             :}
-                | cond:e1 OR cond:e2                                            {: //RESULT = (Boolean)e1 || (Boolean)e2;                             :}
-                | cond:e1 EQUAL cond:e2                                         {: //RESULT = ((e1.equals(e2))?true:false);                           :}
-                | cond:e1 NOTEQUAL cond:e2                                      {: //RESULT = ((e1.equals(e2))?false:true);                           :}
-                | cond:e1 MORE cond:e2                                          {: //RESULT = (((Integer)e1).compareTo((Integer)e2))==1?true:false;   :}
-                | cond:e1 LESS cond:e2                                          {: //RESULT = (((Integer)e1).compareTo((Integer)e2))==-1?true:false;  :}
-                | INTEGER:n                                                     {: //RESULT = n;                             :}
-                | IDENTIFIER:n                                                  {::}
-                ;
+ope     ::= ope:e1 PLUS  ope:e2                                                 {: //RESULT = (Integer)e1+(Integer)e2;       :}
+            | ope:e1 MINUS ope:e2                                               {: //RESULT = (Integer)e1-(Integer)e2;       :}
+            | ope:e1 TIMES ope:e2                                               {: //RESULT = (Integer)e1*(Integer)e2;       :}
+            | ope:e1 DIVIDE ope:e2                                              {: //RESULT = (Integer)e1/(Integer)e2;       :}
+            | MINUS ope:e                                                       {: //RESULT = new Integer(0-(Integer)e);     :}
+            | NUMBER:n                                                         {: //RESULT = n;                             :}
+            | IDENTIFIER:n                                                      {::}
+            | LPAR ope:e RPAR                                                   {: //RESULT = e;                             :}  
+            ;
+
+cond    ::= BOOLEAN:n                                                           {: //RESULT = n;                                                      :}
+            | cond:e1 AND cond:e2                                               {: //RESULT = (Boolean)e1 && (Boolean)e2;                             :}
+            | cond:e1 OR cond:e2                                                {: //RESULT = (Boolean)e1 || (Boolean)e2;                             :}
+            | cond:e1 EQUAL cond:e2                                             {: //RESULT = ((e1.equals(e2))?true:false);                           :}
+            | cond:e1 NOTEQUAL cond:e2                                          {: //RESULT = ((e1.equals(e2))?false:true);                           :}
+            | cond:e1 MORE cond:e2                                              {: //RESULT = (((Integer)e1).compareTo((Integer)e2))==1?true:false;   :}
+            | cond:e1 LESS cond:e2                                              {: //RESULT = (((Integer)e1).compareTo((Integer)e2))==-1?true:false;  :}         
+            | LPAR cond:e RPAR                                                  {: //RESULT = e;                                                      :}
+            ;

@@ -10,6 +10,7 @@ package structures;
  * @author Scarlet
  */
 public class Token {
+    
     private final String type;
     private final String lexeme;
     

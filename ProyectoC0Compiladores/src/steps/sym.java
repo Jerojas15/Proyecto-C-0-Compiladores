@@ -25,6 +25,7 @@ public class sym {
   public static final int ASIGN = 12;
   public static final int LKEY = 17;
   public static final int BOOLEAN = 29;
+  public static final int NUMBER = 28;
   public static final int EOF = 0;
   public static final int DIVIDE = 5;
   public static final int MAIN = 20;
@@ -34,7 +35,6 @@ public class sym {
   public static final int MINUS = 3;
   public static final int error = 1;
   public static final int PUTS = 23;
-  public static final int INTEGER = 28;
   public static final int RPAR = 14;
   public static final int LPAR = 13;
   public static final int LESS = 7;
@@ -67,7 +67,7 @@ public class sym {
   "INT",
   "BREAK",
   "ELSE",
-  "INTEGER",
+  "NUMBER",
   "BOOLEAN"
   };
 }

@@ -5,7 +5,6 @@
  */
 package ui;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,14 +16,13 @@ import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import steps.Lexer;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ScannerBuffer;
 import java_cup.runtime.SymbolFactory;
 import steps.Parser;
-//import steps.Lexer;
+import structures.Token;
 
 /**
  *
@@ -35,6 +33,7 @@ public class IDE extends javax.swing.JFrame {
     private static JFileChooser fileChooser;
     public static boolean error = false;
     public static String errMessage = "";
+    
     /**
      * Creates new form IDE
      */
@@ -217,20 +216,16 @@ public class IDE extends javax.swing.JFrame {
     private void compileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileButtonActionPerformed
         String tokenList = "";
         try{
-            SymbolFactory symbolFactory = new ComplexSymbolFactory();
             String content = editorPane.getText();             
-            Lexer lexer = new Lexer(new StringReader(content),symbolFactory);
-            ScannerBuffer buffer = new ScannerBuffer(lexer);
-            Parser p = new Parser(buffer,new ComplexSymbolFactory());
+            Lexer lexer = new Lexer(new StringReader(content));
+            Parser p = new Parser(lexer);
             p.parse();
             //System.out.println(buffer.getBuffered());
-            for(Symbol symbol : buffer.getBuffered()){
-                tokenList += symbol.toString();
+            for(Token token : lexer.getTokenList()){
+                tokenList += token.toString();
                 tokenList += "\n";
             }
             //tokenList += buffer.getBuffered().stream().map((symbol) -> (symbol.toString()+"\n")).reduce(tokenList, String::concat);  
-        }catch (IOException ioe) {
-            messageTab.setText("Failed to compile file");
         } catch (Exception ex) {
             Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
         }

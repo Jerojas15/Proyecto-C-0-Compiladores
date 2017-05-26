@@ -1,7 +1,8 @@
 package steps;
 
-import java_cup.runtime.Symbol;
-import java_cup.runtime.SymbolFactory;
+import structures.Token;
+import java.util.ArrayList;
+import java_cup.runtime.*;
 %%
 
 %public
@@ -12,117 +13,149 @@ import java_cup.runtime.SymbolFactory;
 %column
 
 %{
-	public Lexer(java.io.Reader in, SymbolFactory sf){
-		this(in);
-		this.sf=sf;
-	}
-	private SymbolFactory sf;
+	private static ArrayList<Token> tokenList = new ArrayList<>();
         
         private void error(String message) {
             System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
         }
 
+        public ArrayList<Token> getTokenList() {
+            return this.tokenList;
+        }
+        
+        private Symbol symbol(int type) {
+            return new Symbol(type, yyline, yycolumn);
+        }
+        private Symbol symbol(int type, Object value) {
+            return new Symbol(type, yyline, yycolumn, value);
+        }
+
 %}
 %eofval{
-    return sf.newSymbol("EOF",sym.EOF);
+    return symbol(sym.EOF, "EOF");
 %eofval}
 
 LETTER= [a-zA-Z]
 DIGIT = [0-9]
 NUMBER = {DIGIT}+
-SYMBOLS = [!*\\\:+-=<>,.;:/]
-IDENTIFIER = {LETTER}({DIGIT}|{LETTER})*
+IDENTIFIER = ({LETTER}|"_")({DIGIT}|{LETTER})*
 WHITESPACE = [ \r\n\t\f]
-CONSTANT = \"([a-zA-Z0-9]|{WHITESPACE}|{SYMBOLS})*\"
-BOOL = "true" | "false"
+CONSTANT = \"([\x20-\x21\x23-\xFE])*\"
 
 %%
 <YYINITIAL> {
         
         {WHITESPACE} {/* ignore */}
-        {BOOL} {
-            return sf.newSymbol("BOOLEAN",sym.BOOLEAN, new Boolean(yytext()));
-        }
         {NUMBER} {
-            return sf.newSymbol("INTEGER",sym.INTEGER,new Integer(yytext()));
+            this.tokenList.add(new Token("NUMBER", yytext()));
+            return symbol(sym.NUMBER, new Integer(Integer.parseInt(yytext())));
         }
         "main" { 
-            return sf.newSymbol("MAIN",sym.MAIN);
+            this.tokenList.add(new Token("MAIN", yytext()));
+            return symbol(sym.MAIN);
         }
         "if" { 
-            return sf.newSymbol("IF",sym.IF);
+            this.tokenList.add(new Token("IF", yytext()));
+            return symbol(sym.IF);
         }
         "while" { 
-            return sf.newSymbol("WHILE",sym.WHILE);
+            this.tokenList.add(new Token("WHILE", yytext()));
+            return symbol(sym.WHILE);
         }
         "else" { 
-            return sf.newSymbol("ELSE",sym.ELSE);
+            this.tokenList.add(new Token("ELSE", yytext()));
+            return symbol(sym.ELSE);
         }
-        "putw" { 
-            return sf.newSymbol("PUTW",sym.PUTW);
+        "putw" {
+            this.tokenList.add(new Token("PUTW", yytext())); 
+            return symbol(sym.PUTW);
         }
         "puts" { 
-            return sf.newSymbol("PUTS",sym.PUTS);
+            this.tokenList.add(new Token("PUTS", yytext()));
+            return symbol(sym.PUTS);
         }
         "int" { 
-            return sf.newSymbol("INT",sym.INT);
+            this.tokenList.add(new Token("TYPE", yytext()));
+            return symbol(sym.INT);
         }
         "break" { 
-            return sf.newSymbol("BREAK",sym.BREAK);
+            this.tokenList.add(new Token("BREAK", yytext()));
+            return symbol(sym.BREAK);
         }
         "(" { 
-            return sf.newSymbol("LPAR",sym.LPAR);
+            this.tokenList.add(new Token("LPAR", yytext()));
+            return symbol(sym.LPAR);
         }
         ")" { 
-            return sf.newSymbol("RPAR",sym.RPAR);
+            this.tokenList.add(new Token("RPAR", yytext()));
+            return symbol(sym.RPAR);
         }
         "{" { 
-            return sf.newSymbol("LKEY",sym.LKEY);
+            this.tokenList.add(new Token("LKEY", yytext()));
+            return symbol(sym.LKEY);
         }
         "}" { 
-            return sf.newSymbol("RKEY",sym.RKEY);
+            this.tokenList.add(new Token("RKEY", yytext()));
+            return symbol(sym.RKEY);
         }
         ";" { 
-            return sf.newSymbol("SEMICOLON",sym.SEMICOLON);
+            this.tokenList.add(new Token("SEMICOLON", yytext()));
+            return symbol(sym.SEMICOLON);
         }
         "+" { 
-            return sf.newSymbol("PLUS",sym.PLUS);
+            this.tokenList.add(new Token("PLUS", yytext()));
+            return symbol(sym.PLUS);
         }
         "-" { 
-            return sf.newSymbol("MINUS",sym.MINUS);
+            this.tokenList.add(new Token("MINUS", yytext()));
+            return symbol(sym.MINUS);
         }
         "*" { 
-            return sf.newSymbol("TIMES",sym.TIMES);
+            this.tokenList.add(new Token("TIMES", yytext()));
+            return symbol(sym.TIMES);
         }
         "/" { 
-            return sf.newSymbol("DIVIDE",sym.DIVIDE);
+            this.tokenList.add(new Token("DIVIDE", yytext()));
+            return symbol(sym.DIVIDE);
         }
         "<" { 
-            return sf.newSymbol("LESS",sym.LESS);
+            this.tokenList.add(new Token("LESS", yytext()));
+            return symbol(sym.LESS);
         }
-        ">" { 
-            return sf.newSymbol("MORE",sym.MORE);
+        ">" {
+            this.tokenList.add(new Token("MORE", yytext())); 
+            return symbol(sym.MORE);
         }
         "==" { 
-            return sf.newSymbol("EQUAL",sym.EQUAL);
+            this.tokenList.add(new Token("EQUAL", yytext()));
+            return symbol(sym.EQUAL);
         }
         "¡=" { 
-            return sf.newSymbol("NOTEQUAL",sym.NOTEQUAL);
+            this.tokenList.add(new Token("NOTEQUAL", yytext()));
+            return symbol(sym.NOTEQUAL);
         }
         "||" { 
-            return sf.newSymbol("OR",sym.OR);
+            this.tokenList.add(new Token("OR", yytext()));
+            return symbol(sym.OR);
         }
         "&&" { 
-            return sf.newSymbol("AND",sym.AND);
+            this.tokenList.add(new Token("AND", yytext()));
+            return symbol(sym.AND);
         }
         "=" { 
-            return sf.newSymbol("ASIGN",sym.ASIGN);
+            this.tokenList.add(new Token("ASIGN", yytext()));
+            return symbol(sym.ASIGN);
         }
         {CONSTANT} {
-            return sf.newSymbol("CONSTANT",sym.CONSTANT,yytext());
+            this.tokenList.add(new Token("CONSTANT", yytext()));
+            return symbol(sym.CONSTANT,yytext());
         }  
         {IDENTIFIER} {
-            return sf.newSymbol("IDENTIFIER",sym.IDENTIFIER, yytext());
+            this.tokenList.add(new Token("IDENTIFIER", yytext()));
+            return symbol(sym.IDENTIFIER, yytext());
         }
 }
-. {System.out.print("error! Character not recognized "+yytext());}
+. {
+    this.tokenList.add(new Token("ERROR", yytext()));
+    error("Character not recognized "+yytext());
+}
