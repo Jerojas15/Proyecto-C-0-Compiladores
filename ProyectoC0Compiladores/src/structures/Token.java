@@ -23,4 +23,13 @@ public class Token {
     public String toString(){
         return String.format("<%s,%s>", type, lexeme);
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getLexeme() {
+        return lexeme;
+    }
+    
 }

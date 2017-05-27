@@ -2,14 +2,34 @@ package steps;
 
 import java_cup.runtime.*;
 import ui.IDE;
+import structures.*;
 parser code {:
 
     public void syntax_error(Symbol s){
-        System.out.println("Compiler has detected a syntax error at line " + s.left 
-            + " column " + s.right);
+        IDE.error = true;
+        IDE.errMessage = IDE.errMessage +("Compiler has detected a syntax error at line " + (s.left+1) 
+            + " column " + s.right + " symbol " + s.value);
     }
-    
+    public void report_fatal_error(String message, Object info) {
+        IDE.error = true;
+        IDE.errMessage = IDE.errMessage +("Fatal Error! Your code is about to explode");
+    }
 :};
+
+action code {:
+    Table table;
+    int inWhile;
+    void init(){
+        table = new Table();
+        inWhile = 0;
+    }
+    boolean exists(String symbol){
+        return table.ContainedInSymbolTable(symbol);
+    }
+    void addNewSymbol(int code, String symbol){
+        table.addNewSymbol(code, symbol);
+    }
+:}
 
 /* Terminals and Non Terminals */ 
 
@@ -36,6 +56,7 @@ non terminal        putsstmt;
 non terminal        breakstmt;
 non terminal        cond;
 non terminal        ope;
+non terminal        stmts;
 
 /* Precedence */ 
 
@@ -51,72 +72,78 @@ precedence left     ELSE;
 
 /* Grammar Rules */ 
 
-program ::= varlist body
+program ::= {:init();:}
+            varlist body
             | body
             ;
 
-body    ::= MAIN LPAR RPAR LKEY stmtlist:s RKEY                                 {:RESULT = (Boolean)true;   :}
+body    ::= MAIN LPAR RPAR LKEY stmtlist RKEY
             ;
 
 varlist ::= varlist var
             | var
             ;
 
-var     ::= INT IDENTIFIER SEMICOLON                                            {::}
+var     ::= INT IDENTIFIER:id SEMICOLON              {: if(!exists(id.toString())){
+                                                            addNewSymbol(sym.INT, id.toString());
+                                                        }else{
+                                                            IDE.error = true;
+                                                            IDE.errMessage = IDE.errMessage +(ErrorMessages.VARIABLEEXISTS+id.toString());}:}
             ;
 
-stmtlist::= stmtlist stmt                                                       {://RESULT = s;:}
-            | stmt                                                              {://RESULT = s;:}
-            ;
-/*
-stmt    ::= IF LPAR cond RPAR LKEY stmtlist RKEY 
-            | IF LPAR cond RPAR LKEY stmtlist RKEY RPAR ELSE LKEY stmtlist RKEY
-            | WHILE LPAR cond RPAR LKEY stmtlist RKEY
-            | PUTS LPAR CONSTANT:c RPAR SEMICOLON                               {: //System.out.println("String "+(String)c);:}
-            | PUTW LPAR ope:e RPAR SEMICOLON                                    {: //System.out.println("int "+(Integer)e);  :}
-            | BREAK SEMICOLON                                                   {::}
-            | IDENTIFIER ASIGN ope:e SEMICOLON                                  {::}
-            ;
-*/
+stmtlist::= stmts
+            | ;
+
+stmts   ::= stmts stmt | stmt;
+
 stmt    ::= ifstmt
             | whilestmt
             | asignstmt
             | putwstmt
             | putsstmt
-            | breakstmt
+            | breakstmt                     {:if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.BREAKERROR);}:}
             ;
 
 ifstmt      ::= IF LPAR cond RPAR LKEY stmtlist RKEY ELSE LKEY stmtlist RKEY
                 | IF LPAR cond RPAR LKEY stmtlist RKEY  
                 ;
-whilestmt   ::= WHILE LPAR cond RPAR 
-                LKEY stmtlist RKEY
+
+whilestmt   ::= WHILE LPAR cond RPAR LKEY{:inWhile++;:} stmtlist {:inWhile--;:} RKEY
                 ;
-asignstmt   ::= IDENTIFIER ASIGN ope:e SEMICOLON
+
+asignstmt   ::= IDENTIFIER:id ASIGN ope SEMICOLON          {:if(!exists(id.toString())){
+                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.NOVARIABLE+id.toString());}
+                                                           :}
                 ;
-putwstmt    ::= PUTW LPAR ope:e RPAR SEMICOLON
+
+putwstmt    ::= PUTW LPAR ope RPAR SEMICOLON
                ;
-putsstmt    ::= PUTS LPAR CONSTANT:c RPAR SEMICOLON
+
+putsstmt    ::= PUTS LPAR CONSTANT RPAR SEMICOLON
                 ;
+
 breakstmt   ::= BREAK SEMICOLON
                 ;
 
-ope     ::= ope:e1 PLUS  ope:e2                                                 {: //RESULT = (Integer)e1+(Integer)e2;       :}
-            | ope:e1 MINUS ope:e2                                               {: //RESULT = (Integer)e1-(Integer)e2;       :}
-            | ope:e1 TIMES ope:e2                                               {: //RESULT = (Integer)e1*(Integer)e2;       :}
-            | ope:e1 DIVIDE ope:e2                                              {: //RESULT = (Integer)e1/(Integer)e2;       :}
-            | MINUS ope:e                                                       {: //RESULT = new Integer(0-(Integer)e);     :}
-            | NUMBER:n                                                         {: //RESULT = n;                             :}
-            | IDENTIFIER:n                                                      {::}
-            | LPAR ope:e RPAR                                                   {: //RESULT = e;                             :}  
+ope     ::= ope:e1 PLUS  ope:e2                                                 
+            | ope:e1 MINUS ope:e2                                              
+            | ope:e1 TIMES ope:e2                                               
+            | ope:e1 DIVIDE ope:e2                                             
+            | MINUS ope:e                                                      
+            | NUMBER:n                                                        
+            | IDENTIFIER:id                                  {:if(!exists(id.toString())){
+                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.NOVARIABLE+id.toString());}
+                                                           :}             
+            | LPAR ope:e RPAR                                                     
             ;
 
-cond    ::= BOOLEAN:n                                                           {: //RESULT = n;                                                      :}
-            | cond:e1 AND cond:e2                                               {: //RESULT = (Boolean)e1 && (Boolean)e2;                             :}
-            | cond:e1 OR cond:e2                                                {: //RESULT = (Boolean)e1 || (Boolean)e2;                             :}
-            | cond:e1 EQUAL cond:e2                                             {: //RESULT = ((e1.equals(e2))?true:false);                           :}
-            | cond:e1 NOTEQUAL cond:e2                                          {: //RESULT = ((e1.equals(e2))?false:true);                           :}
-            | cond:e1 MORE cond:e2                                              {: //RESULT = (((Integer)e1).compareTo((Integer)e2))==1?true:false;   :}
-            | cond:e1 LESS cond:e2                                              {: //RESULT = (((Integer)e1).compareTo((Integer)e2))==-1?true:false;  :}         
-            | LPAR cond:e RPAR                                                  {: //RESULT = e;                                                      :}
+cond    ::= cond:e1 AND cond:e2                                              
+            | cond:e1 OR cond:e2                                            
+            | ope:e1 EQUAL ope:e2                                            
+            | ope:e1 NOTEQUAL ope:e2                                         
+            | ope:e1 MORE ope:e2                                       
+            | ope:e1 LESS ope:e2                                             
+            | BOOLEAN:n                                                
+            | LPAR cond:e RPAR                       
             ;
+

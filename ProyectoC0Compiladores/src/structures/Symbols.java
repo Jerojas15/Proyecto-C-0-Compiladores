@@ -9,15 +9,19 @@ package structures;
  *
  * @author Scarlet
  */
-public class Symbol {
+public class Symbols {
     
     private int cod;
     private String id;
     private int direct;
     
-    public Symbol(int cod, String id, int direct){
+    public Symbols(int cod, String id, int direct){
         this.cod = cod;
         this.direct = direct;
         this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 }

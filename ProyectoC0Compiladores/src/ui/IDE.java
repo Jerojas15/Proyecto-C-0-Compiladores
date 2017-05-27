@@ -215,6 +215,8 @@ public class IDE extends javax.swing.JFrame {
 
     private void compileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileButtonActionPerformed
         String tokenList = "";
+        tokenLabel.setText("");
+        messageTab.setText("");
         try{
             String content = editorPane.getText();             
             Lexer lexer = new Lexer(new StringReader(content));
@@ -233,7 +235,7 @@ public class IDE extends javax.swing.JFrame {
             if(!error){
                 messageTab.setText("File successfully compiled");
             }else{
-                messageTab.setText("Failed to compile file. "+ errMessage);
+                messageTab.setText("Failed to compile file. \n"+ errMessage);
             }
             tokenLabel.setText(tokenList);
         }
