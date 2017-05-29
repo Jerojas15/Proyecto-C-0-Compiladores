@@ -239,7 +239,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 
-    public void syntax_error(Symbol s){
+    public void syntax_error(java_cup.runtime.Symbol s){
         IDE.error = true;
         IDE.errMessage = IDE.errMessage +("Compiler has detected a syntax error at line " + (s.left+1) 
             + " column " + s.right + " symbol " + s.value);
@@ -370,7 +370,7 @@ init();
                                                             addNewSymbol(sym.INT, id.toString());
                                                         }else{
                                                             IDE.error = true;
-                                                            IDE.errMessage = IDE.errMessage +(ErrorMessages.VARIABLEEXISTS+id.toString());}
+                                                            IDE.errMessage = IDE.errMessage +(ErrorMessage.VARIABLEEXISTS+id.toString());}
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("var",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -460,7 +460,7 @@ init();
           case 17: // stmt ::= breakstmt 
             {
               Object RESULT =null;
-		if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.BREAKERROR);}
+		if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.BREAKERROR);}
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("stmt",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -520,7 +520,7 @@ inWhile--;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
 		if(!exists(id.toString())){
-                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.NOVARIABLE+id.toString());}
+                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());}
                                                            
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("asignstmt",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -645,7 +645,7 @@ inWhile--;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		if(!exists(id.toString())){
-                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.NOVARIABLE+id.toString());}
+                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());}
                                                            
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ope",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

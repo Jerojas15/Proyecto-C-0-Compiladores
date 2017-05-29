@@ -5,6 +5,7 @@
  */
 package ui;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,6 +22,9 @@ import java.util.logging.Logger;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ScannerBuffer;
 import java_cup.runtime.SymbolFactory;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 import steps.Parser;
 import structures.Token;
 
@@ -39,10 +43,10 @@ public class IDE extends javax.swing.JFrame {
      */
     public IDE() {
         initComponents();
-        //this.getContentPane().setBackground(new Color(19,16,16));      
-        //this.projectLabel.setBackground(new Color(51,51,51));
-        //this.Tabs.setBackground(new Color(153,153,153));
-        //this.editorPane.setBackground(Color.red);
+        this.getContentPane().setBackground(new Color(19,16,16));
+        this.editorPane.setOpaque(true);
+        this.editorPane.setBackground(Color.red);
+        
         
         fileChooser = new JFileChooser();
     }
@@ -56,13 +60,14 @@ public class IDE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        projectLabel = new javax.swing.JPanel();
-        Tabs = new javax.swing.JTabbedPane();
-        messageTab = new javax.swing.JLabel();
-        tokenTab = new javax.swing.JScrollPane();
-        tokenLabel = new javax.swing.JLabel();
+        jSplitPane1 = new javax.swing.JSplitPane();
         scrollPane = new javax.swing.JScrollPane();
         editorPane = new javax.swing.JEditorPane();
+        Tabs = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageLabel = new javax.swing.JTextArea();
+        tokenTab = new javax.swing.JScrollPane();
+        tokenLabel = new javax.swing.JTextArea();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openButton = new javax.swing.JMenuItem();
@@ -78,32 +83,53 @@ public class IDE extends javax.swing.JFrame {
         setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
         setForeground(new java.awt.Color(51, 51, 51));
 
-        projectLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        projectLabel.setForeground(new java.awt.Color(51, 51, 51));
+        jSplitPane1.setDividerLocation(520);
+        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
-        javax.swing.GroupLayout projectLabelLayout = new javax.swing.GroupLayout(projectLabel);
-        projectLabel.setLayout(projectLabelLayout);
-        projectLabelLayout.setHorizontalGroup(
-            projectLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 156, Short.MAX_VALUE)
-        );
-        projectLabelLayout.setVerticalGroup(
-            projectLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
-        );
+        scrollPane.setBackground(new java.awt.Color(102, 102, 102));
+        scrollPane.setForeground(new java.awt.Color(102, 102, 102));
 
+        editorPane.setBackground(new java.awt.Color(102, 102, 102));
+        editorPane.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        editorPane.setForeground(new java.awt.Color(102, 102, 102));
+        editorPane.setToolTipText("");
+        editorPane.setCaretColor(new java.awt.Color(102, 102, 102));
+        editorPane.setDragEnabled(true);
+        editorPane.setSelectedTextColor(new java.awt.Color(255, 255, 255));
+        editorPane.setSelectionColor(new java.awt.Color(51, 51, 51));
+        scrollPane.setViewportView(editorPane);
+
+        jSplitPane1.setTopComponent(scrollPane);
+
+        Tabs.setBackground(new java.awt.Color(19, 16, 16));
         Tabs.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        Tabs.setOpaque(true);
 
-        messageTab.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        Tabs.addTab("Message", messageTab);
+        messageLabel.setEditable(false);
+        messageLabel.setBackground(new java.awt.Color(102, 102, 102));
+        messageLabel.setColumns(20);
+        messageLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        messageLabel.setRows(5);
+        jScrollPane1.setViewportView(messageLabel);
 
+        Tabs.addTab("Message", jScrollPane1);
+
+        tokenTab.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                tokenTabHierarchyChanged(evt);
+            }
+        });
+
+        tokenLabel.setEditable(false);
+        tokenLabel.setBackground(new java.awt.Color(102, 102, 102));
+        tokenLabel.setColumns(20);
+        tokenLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        tokenLabel.setRows(5);
         tokenTab.setViewportView(tokenLabel);
 
         Tabs.addTab("Tokens", tokenTab);
 
-        editorPane.setBackground(new java.awt.Color(255, 255, 255));
-        editorPane.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        scrollPane.setViewportView(editorPane);
+        jSplitPane1.setRightComponent(Tabs);
 
         menuBar.setBackground(new java.awt.Color(51, 51, 51));
         menuBar.setForeground(new java.awt.Color(51, 51, 51));
@@ -153,24 +179,15 @@ public class IDE extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(projectLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Tabs)
-                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1134, Short.MAX_VALUE))
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1053, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(projectLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(scrollPane)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -184,14 +201,14 @@ public class IDE extends javax.swing.JFrame {
         if (returnValue == JFileChooser.APPROVE_OPTION){
             try{
                 Reader reader = new BufferedReader(new FileReader(fileChooser.getSelectedFile()));
-                messageTab.setText("File successfully loaded");
+                messageLabel.setText("File successfully loaded");
                 editorPane.read(reader, evt);               
             }catch (IOException ioe) {
-                messageTab.setText("Failed to load file");
+                messageLabel.setText("Failed to load file");
             }
         }
         else {
-            messageTab.setText("No file choosen");
+            messageLabel.setText("No file choosen");
         }
     }//GEN-LAST:event_openButtonActionPerformed
 
@@ -208,7 +225,7 @@ public class IDE extends javax.swing.JFrame {
                 fw.flush();
                 fw.close();
             } catch (IOException e) {
-                messageTab.setText("Failed to save file");
+                messageLabel.setText("Failed to save file");
             }
         }
     }//GEN-LAST:event_saveButtonActionPerformed
@@ -216,7 +233,7 @@ public class IDE extends javax.swing.JFrame {
     private void compileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileButtonActionPerformed
         String tokenList = "";
         tokenLabel.setText("");
-        messageTab.setText("");
+        messageLabel.setText("");
         try{
             String content = editorPane.getText();             
             Lexer lexer = new Lexer(new StringReader(content));
@@ -233,13 +250,17 @@ public class IDE extends javax.swing.JFrame {
         }
         finally{
             if(!error){
-                messageTab.setText("File successfully compiled");
+                messageLabel.setText("File successfully compiled");
             }else{
-                messageTab.setText("Failed to compile file. \n"+ errMessage);
+                messageLabel.setText("Failed to compile file. \n"+ errMessage);
             }
             tokenLabel.setText(tokenList);
         }
     }//GEN-LAST:event_compileButtonActionPerformed
+
+    private void tokenTabHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_tokenTabHierarchyChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tokenTabHierarchyChanged
     
     /**
      * @param args the command line arguments
@@ -284,15 +305,16 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JMenuItem compileButton;
     private javax.swing.JEditorPane editorPane;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JLabel messageTab;
+    private javax.swing.JTextArea messageLabel;
     private javax.swing.JMenuItem openButton;
-    private javax.swing.JPanel projectLabel;
     private javax.swing.JMenuItem runButton;
     private javax.swing.JMenu runMenu;
     private javax.swing.JMenuItem saveButton;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JLabel tokenLabel;
+    private javax.swing.JTextArea tokenLabel;
     private javax.swing.JScrollPane tokenTab;
     // End of variables declaration//GEN-END:variables
 }

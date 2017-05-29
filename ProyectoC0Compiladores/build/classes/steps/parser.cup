@@ -5,7 +5,7 @@ import ui.IDE;
 import structures.*;
 parser code {:
 
-    public void syntax_error(Symbol s){
+    public void syntax_error(java_cup.runtime.Symbol s){
         IDE.error = true;
         IDE.errMessage = IDE.errMessage +("Compiler has detected a syntax error at line " + (s.left+1) 
             + " column " + s.right + " symbol " + s.value);
