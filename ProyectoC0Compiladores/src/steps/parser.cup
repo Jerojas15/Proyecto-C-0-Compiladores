@@ -3,6 +3,8 @@ package steps;
 import java_cup.runtime.*;
 import ui.IDE;
 import structures.*;
+import java.util.ArrayList;
+
 parser code {:
 
     public void syntax_error(java_cup.runtime.Symbol s){
@@ -21,14 +23,24 @@ action code {:
     int inWhile;
     int direction;
     int countIf;
+    int countLoop;
+    int countConstant;
     IntermediateCode file;
     Stack ifStack;
+    Stack loopStack;
+    ArrayList<String> constantList;
+
     void init(){
         table = new Table();
         inWhile = 0;
         direction = 30000;
         countIf = 0;
+        countLoop = 0;
+        countConstant = 0;
         ifStack = new Stack();
+        loopStack = new Stack();
+        constantList = new ArrayList<>();
+        
         file = new IntermediateCode("test.txt");
         file.openFile();
     }
@@ -59,7 +71,7 @@ action code {:
         file.write(new IntermediateLine("LOAD_NUMBER",e1,"null",String.valueOf(direction)));
         return new Expression(direction++);
     }
-Expression identifier(String e1){
+    Expression identifier(String e1){
         file.write(new IntermediateLine("LOAD_DIRECTION",String.valueOf(table.getSymbolDirection(e1)),"null",String.valueOf(direction)));
         return new Expression(direction++);
     }
@@ -92,25 +104,39 @@ Expression identifier(String e1){
     Expression less(Expression e1, Expression e2){
         file.write(new IntermediateLine("LESS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
         return new Expression(direction++);
-    }
-    
+    }   
     void asignValue(String id, Expression e){
-        file.write(new IntermediateLine("LOAD_DIRECTION",String.valueOf(e.getDirection()),"null",String.valueOf(table.getSymbolDirection(id))));
-        
+        file.write(new IntermediateLine("LOAD_DIRECTION", String.valueOf(e.getDirection()), "null",String.valueOf(table.getSymbolDirection(id))));      
     }
-
     void closeFile(){
         file.close();
     }
-
     void condicion(Expression e, int number){
-        file.write(new IntermediateLine("JUMP_CONDITION",String.valueOf(e.getDirection()),"null","ELSE_"+String.valueOf(number)));
+        file.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","ELSE_"+String.valueOf(number)));
+    }
+    void condition2(Expression e, int number) {
+        file.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","LOOPEND_"+String.valueOf(number)));
     }
     void jumpLabel(String label, int number){
-        file.write(new IntermediateLine("JUMP_LABEL","null","null",label+"_"+String.valueOf(number)));
+        file.write(new IntermediateLine("JUMP_LABEL", "null", "null", label+"_"+String.valueOf(number)));
     }
     void setLabel(String label, int number){
-        file.write(new IntermediateLine("LABEL","null","null",label+"_"+String.valueOf(number)));
+        file.write(new IntermediateLine("LABEL", "null", "null", label+"_"+String.valueOf(number)));
+    }
+    void printW(Expression e){
+        file.write(new IntermediateLine("PRINT_INT", String.valueOf(e.getDirection()), "null", "null"));        
+    }
+    void printS(String c, int number){
+        constantList.add(c);
+        file.write(new IntermediateLine("PRINT_CONSTANT", "CONSTANT_"+String.valueOf(number), "null", "null"));        
+    }
+    void generateConstants() {
+        for(int i=0; i<constantList.size(); i++){
+            file.write(new IntermediateLine("PUT_CONSTANT", "CONSTANT_"+String.valueOf(i+1), "null", constantList.get(i)));          
+        }
+    }
+    void programEnd(){
+            file.write(new IntermediateLine("END", "null", "null", "null"));          
     }
 
 :}
@@ -163,7 +189,13 @@ program ::= {:init();:}
             | body
             ;
 
-body    ::= MAIN LPAR RPAR LKEY stmtlist {:closeFile();:}RKEY
+body    ::= MAIN LPAR RPAR LKEY stmtlist 
+                {:
+                    programEnd();
+                    generateConstants();
+                    closeFile();
+                :}
+            RKEY
             ;
 
 varlist ::= varlist var
@@ -187,26 +219,84 @@ stmt    ::= ifstmt
             | asignstmt
             | putwstmt
             | putsstmt
-            | breakstmt                     {:if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.BREAKERROR);}:}
+            | breakstmt                              {:if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.BREAKERROR);}:}
             ;
 
-ifstmt      ::= IF LPAR{:countIf++;ifStack.push(countIf);:} cond:c {:condicion(c,ifStack.top());:} RPAR LKEY stmtlist RKEY {:jumpLabel("ENDIF", ifStack.top());setLabel("ELSE",ifStack.top());:} elsestmt {:setLabel("ENDIF",ifStack.top());ifStack.pop();:}
+ifstmt      ::= IF LPAR
+                    {:
+                        countIf++;ifStack.push(countIf);
+                    :} 
+                cond:c 
+                    {:
+                        condicion(c, ifStack.top());
+                    :} 
+                RPAR LKEY stmtlist RKEY 
+                    {:
+                        jumpLabel("ENDIF", ifStack.top());
+                        setLabel("ELSE", ifStack.top());
+                    :} 
+                elsestmt 
+                    {:
+                        setLabel("ENDIF", ifStack.top());
+                        ifStack.pop();
+                    :}
                 ;
 
 elsestmt    ::= ELSE LKEY stmtlist RKEY
                 | ;
 
-whilestmt   ::= WHILE LPAR cond RPAR LKEY{:inWhile++;:} stmtlist {:inWhile--;:} RKEY
+whilestmt   ::= WHILE LPAR
+                    {:
+                        countLoop++;
+                        loopStack.push(countLoop);
+                        setLabel("LOOP", loopStack.top());
+                    :}
+                cond:c
+                    {:
+                        condition2(c, loopStack.top());
+                    :} 
+                RPAR LKEY
+                    {:
+                        inWhile++;
+                    :} 
+                stmtlist 
+                    {:
+                        inWhile--;
+                    :} 
+                RKEY
+                    {:
+                        jumpLabel("LOOP", loopStack.top());
+                        setLabel("LOOPEND", loopStack.top());
+                        loopStack.pop();
+                    :}
                 ;
 
-asignstmt   ::= IDENTIFIER:id {:if(!exists(id.toString())){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());}:}
-                ASIGN ope:e SEMICOLON {:asignValue(id.toString(), e);:}
+asignstmt   ::= IDENTIFIER:id 
+                    {:
+                        if(!exists(id.toString())){
+                            IDE.error = true;
+                            IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());
+                        }
+                    :}
+                ASIGN ope:e SEMICOLON 
+                    {:
+                        asignValue(id.toString(), e);
+                    :}
                 ;
 
-putwstmt    ::= PUTW LPAR ope RPAR SEMICOLON
-               ;
+putwstmt    ::= PUTW LPAR ope:e
+                    {:
+                        printW(e);
+                    :} 
+                RPAR SEMICOLON
+                ;
 
-putsstmt    ::= PUTS LPAR CONSTANT RPAR SEMICOLON
+putsstmt    ::= PUTS LPAR CONSTANT:c
+                    {:
+                        countConstant++;
+                        printS(c.toString(), countConstant);
+                    :} 
+                RPAR SEMICOLON
                 ;
 
 breakstmt   ::= BREAK SEMICOLON

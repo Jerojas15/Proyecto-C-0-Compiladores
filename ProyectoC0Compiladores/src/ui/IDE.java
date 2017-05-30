@@ -13,18 +13,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import steps.Lexer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.ScannerBuffer;
-import java_cup.runtime.SymbolFactory;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 import steps.Parser;
 import structures.Token;
 
@@ -239,12 +232,10 @@ public class IDE extends javax.swing.JFrame {
             Lexer lexer = new Lexer(new StringReader(content));
             Parser p = new Parser(lexer);
             p.parse();
-            //System.out.println(buffer.getBuffered());
             for(Token token : lexer.getTokenList()){
                 tokenList += token.toString();
                 tokenList += "\n";
             }
-            //tokenList += buffer.getBuffered().stream().map((symbol) -> (symbol.toString()+"\n")).reduce(tokenList, String::concat);  
         } catch (Exception ex) {
             Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -3,6 +3,8 @@ package steps;
 import java_cup.runtime.*;
 import ui.IDE;
 import structures.*;
+import java.util.ArrayList;
+
 parser code {:
 
     public void syntax_error(java_cup.runtime.Symbol s){
@@ -19,16 +21,124 @@ parser code {:
 action code {:
     Table table;
     int inWhile;
+    int direction;
+    int countIf;
+    int countLoop;
+    int countConstant;
+    IntermediateCode file;
+    Stack ifStack;
+    Stack loopStack;
+    ArrayList<String> constantList;
+
     void init(){
         table = new Table();
         inWhile = 0;
+        direction = 30000;
+        countIf = 0;
+        countLoop = 0;
+        countConstant = 0;
+        ifStack = new Stack();
+        loopStack = new Stack();
+        constantList = new ArrayList<>();
+        
+        file = new IntermediateCode("test.txt");
+        file.openFile();
     }
     boolean exists(String symbol){
         return table.ContainedInSymbolTable(symbol);
     }
     void addNewSymbol(int code, String symbol){
-        table.addNewSymbol(code, symbol);
+        table.addNewSymbol(code, symbol, direction);
+        direction++;
     }
+    Expression plus(Expression e1, Expression e2){
+        file.write(new IntermediateLine("PLUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression minus(Expression e1, Expression e2){
+        file.write(new IntermediateLine("MINUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression times(Expression e1, Expression e2){
+       file.write(new IntermediateLine("TIMES",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+       return new Expression(direction++);
+    }
+    Expression divide(Expression e1, Expression e2){
+        file.write(new IntermediateLine("DIVIDE",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression number(String e1){
+        file.write(new IntermediateLine("LOAD_NUMBER",e1,"null",String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression identifier(String e1){
+        file.write(new IntermediateLine("LOAD_DIRECTION",String.valueOf(table.getSymbolDirection(e1)),"null",String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    /*Expression minusAux(Expression e1){
+        file.write(new IntermediateLine("PLUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }*/
+    
+
+    Expression and(Expression e1, Expression e2){
+        file.write(new IntermediateLine("AND",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression or(Expression e1, Expression e2){
+       file.write(new IntermediateLine("OR",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression equal(Expression e1, Expression e2){
+        file.write(new IntermediateLine("EQUAL",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression notequal(Expression e1, Expression e2){
+        file.write(new IntermediateLine("NOTEQUAL",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression more(Expression e1, Expression e2){
+        file.write(new IntermediateLine("MORE",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression less(Expression e1, Expression e2){
+        file.write(new IntermediateLine("LESS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }   
+    void asignValue(String id, Expression e){
+        file.write(new IntermediateLine("LOAD_DIRECTION", String.valueOf(e.getDirection()), "null",String.valueOf(table.getSymbolDirection(id))));      
+    }
+    void closeFile(){
+        file.close();
+    }
+    void condicion(Expression e, int number){
+        file.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","ELSE_"+String.valueOf(number)));
+    }
+    void condition2(Expression e, int number) {
+        file.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","LOOPEND_"+String.valueOf(number)));
+    }
+    void jumpLabel(String label, int number){
+        file.write(new IntermediateLine("JUMP_LABEL", "null", "null", label+"_"+String.valueOf(number)));
+    }
+    void setLabel(String label, int number){
+        file.write(new IntermediateLine("LABEL", "null", "null", label+"_"+String.valueOf(number)));
+    }
+    void printW(Expression e){
+        file.write(new IntermediateLine("PRINT_INT", String.valueOf(e.getDirection()), "null", "null"));        
+    }
+    void printS(String c, int number){
+        constantList.add(c);
+        file.write(new IntermediateLine("PRINT_CONSTANT", "CONSTANT_"+String.valueOf(number), "null", "null"));        
+    }
+    void generateConstants() {
+        for(int i=0; i<constantList.size(); i++){
+            file.write(new IntermediateLine("PUT_CONSTANT", "CONSTANT_"+String.valueOf(i+1), "null", constantList.get(i)));          
+        }
+    }
+    void programEnd(){
+            file.write(new IntermediateLine("END", "null", "null", "null"));          
+    }
+
 :}
 
 /* Terminals and Non Terminals */ 
@@ -37,7 +147,8 @@ terminal            PLUS, MINUS, TIMES, DIVIDE;
 terminal            MORE, LESS, EQUAL, NOTEQUAL;
 terminal            AND, OR, ASIGN;
 terminal            LPAR, RPAR, SEMICOLON, RKEY, LKEY;
-terminal            CONSTANT, IDENTIFIER;
+terminal            CONSTANT;
+terminal            IDENTIFIER;
 terminal            MAIN, IF, WHILE, PUTS, PUTW, INT, BREAK, ELSE;
 terminal Integer    NUMBER;
 terminal Boolean    BOOLEAN;
@@ -54,9 +165,10 @@ non terminal        asignstmt;
 non terminal        putwstmt;
 non terminal        putsstmt;
 non terminal        breakstmt;
-non terminal        cond;
-non terminal        ope;
+non terminal Expression      cond;
+non terminal Expression      ope;
 non terminal        stmts;
+non terminal        elsestmt;
 
 /* Precedence */ 
 
@@ -77,7 +189,13 @@ program ::= {:init();:}
             | body
             ;
 
-body    ::= MAIN LPAR RPAR LKEY stmtlist RKEY
+body    ::= MAIN LPAR RPAR LKEY stmtlist 
+                {:
+                    programEnd();
+                    generateConstants();
+                    closeFile();
+                :}
+            RKEY
             ;
 
 varlist ::= varlist var
@@ -88,7 +206,7 @@ var     ::= INT IDENTIFIER:id SEMICOLON              {: if(!exists(id.toString()
                                                             addNewSymbol(sym.INT, id.toString());
                                                         }else{
                                                             IDE.error = true;
-                                                            IDE.errMessage = IDE.errMessage +(ErrorMessages.VARIABLEEXISTS+id.toString());}:}
+                                                            IDE.errMessage = IDE.errMessage +(ErrorMessage.VARIABLEEXISTS+id.toString());}:}
             ;
 
 stmtlist::= stmts
@@ -101,49 +219,108 @@ stmt    ::= ifstmt
             | asignstmt
             | putwstmt
             | putsstmt
-            | breakstmt                     {:if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.BREAKERROR);}:}
+            | breakstmt                              {:if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.BREAKERROR);}:}
             ;
 
-ifstmt      ::= IF LPAR cond RPAR LKEY stmtlist RKEY ELSE LKEY stmtlist RKEY
-                | IF LPAR cond RPAR LKEY stmtlist RKEY  
+ifstmt      ::= IF LPAR
+                    {:
+                        countIf++;ifStack.push(countIf);
+                    :} 
+                cond:c 
+                    {:
+                        condicion(c, ifStack.top());
+                    :} 
+                RPAR LKEY stmtlist RKEY 
+                    {:
+                        jumpLabel("ENDIF", ifStack.top());
+                        setLabel("ELSE", ifStack.top());
+                    :} 
+                elsestmt 
+                    {:
+                        setLabel("ENDIF", ifStack.top());
+                        ifStack.pop();
+                    :}
                 ;
 
-whilestmt   ::= WHILE LPAR cond RPAR LKEY{:inWhile++;:} stmtlist {:inWhile--;:} RKEY
+elsestmt    ::= ELSE LKEY stmtlist RKEY
+                | ;
+
+whilestmt   ::= WHILE LPAR
+                    {:
+                        countLoop++;
+                        loopStack.push(countLoop);
+                        setLabel("LOOP", loopStack.top());
+                    :}
+                cond:c
+                    {:
+                        condition2(c, loopStack.top());
+                    :} 
+                RPAR LKEY
+                    {:
+                        inWhile++;
+                    :} 
+                stmtlist 
+                    {:
+                        inWhile--;
+                    :} 
+                RKEY
+                    {:
+                        jumpLabel("LOOP", loopStack.top());
+                        setLabel("LOOPEND", loopStack.top());
+                        loopStack.pop();
+                    :}
                 ;
 
-asignstmt   ::= IDENTIFIER:id ASIGN ope SEMICOLON          {:if(!exists(id.toString())){
-                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.NOVARIABLE+id.toString());}
-                                                           :}
+asignstmt   ::= IDENTIFIER:id 
+                    {:
+                        if(!exists(id.toString())){
+                            IDE.error = true;
+                            IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());
+                        }
+                    :}
+                ASIGN ope:e SEMICOLON 
+                    {:
+                        asignValue(id.toString(), e);
+                    :}
                 ;
 
-putwstmt    ::= PUTW LPAR ope RPAR SEMICOLON
-               ;
+putwstmt    ::= PUTW LPAR ope:e
+                    {:
+                        printW(e);
+                    :} 
+                RPAR SEMICOLON
+                ;
 
-putsstmt    ::= PUTS LPAR CONSTANT RPAR SEMICOLON
+putsstmt    ::= PUTS LPAR CONSTANT:c
+                    {:
+                        countConstant++;
+                        printS(c.toString(), countConstant);
+                    :} 
+                RPAR SEMICOLON
                 ;
 
 breakstmt   ::= BREAK SEMICOLON
                 ;
 
-ope     ::= ope:e1 PLUS  ope:e2                                                 
-            | ope:e1 MINUS ope:e2                                              
-            | ope:e1 TIMES ope:e2                                               
-            | ope:e1 DIVIDE ope:e2                                             
-            | MINUS ope:e                                                      
-            | NUMBER:n                                                        
-            | IDENTIFIER:id                                  {:if(!exists(id.toString())){
-                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessages.NOVARIABLE+id.toString());}
+ope     ::= ope:e1 PLUS  ope:e2                         {:RESULT=plus(e1,e2);:}                            
+            | ope:e1 MINUS ope:e2                       {:RESULT=minus(e1,e2);:}                       
+            | ope:e1 TIMES ope:e2                       {:RESULT=times(e1,e2);:}                        
+            | ope:e1 DIVIDE ope:e2                      {:RESULT=divide(e1,e2);:}                       
+            | MINUS ope:e                               {://RESULT=minus(e);:}                       
+            | NUMBER:n                                  {:RESULT=number(n.toString());:}                     
+            | IDENTIFIER:id                             {:if(!exists(id.toString())){
+                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());RESULT=identifier(null);
+                                                          }else{RESULT=identifier(id.toString());}
                                                            :}             
-            | LPAR ope:e RPAR                                                     
+            | LPAR ope:e RPAR                           {:RESULT=e;:}                          
             ;
 
-cond    ::= cond:e1 AND cond:e2                                              
-            | cond:e1 OR cond:e2                                            
-            | ope:e1 EQUAL ope:e2                                            
-            | ope:e1 NOTEQUAL ope:e2                                         
-            | ope:e1 MORE ope:e2                                       
-            | ope:e1 LESS ope:e2                                             
-            | BOOLEAN:n                                                
-            | LPAR cond:e RPAR                       
+cond    ::= cond:e1 AND cond:e2                         {:RESULT=and(e1,e2);:}                     
+            | cond:e1 OR cond:e2                        {:RESULT=or(e1,e2);:}                    
+            | ope:e1 EQUAL ope:e2                       {:RESULT=equal(e1,e2);:}                     
+            | ope:e1 NOTEQUAL ope:e2                    {:RESULT=notequal(e1,e2);:}                     
+            | ope:e1 MORE ope:e2                        {:RESULT=more(e1,e2);:}               
+            | ope:e1 LESS ope:e2                        {:RESULT=less(e1,e2);:}                                
+            | LPAR cond:e RPAR                          {:RESULT=e;:}
             ;
 
