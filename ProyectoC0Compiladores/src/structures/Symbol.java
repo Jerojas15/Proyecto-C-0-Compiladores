@@ -21,6 +21,18 @@ public class Symbol {
         this.id = id;
     }
     
+    public Symbol(int direct){
+        this.direct = direct;
+    }
+
+    public int getCod() {
+        return cod;
+    }
+
+    public int getDirect() {
+        return direct;
+    }
+    
     public String getId(){
         return this.id;
     }

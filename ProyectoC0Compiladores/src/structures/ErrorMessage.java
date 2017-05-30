@@ -17,4 +17,5 @@ public class ErrorMessage {
     public static final String VARIABLEEXISTS = "\n Error! variable already exists. Error: ";
     public static final String BREAKERROR = "\n Error! The break statement must be in a while statement";
     public static final String NOVARIABLE = "\n Error! the variable does not exists. Error: ";
+    public static final String NOFILE = "\n The file could not be loaded";
 }
