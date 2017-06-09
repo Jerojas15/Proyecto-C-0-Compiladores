@@ -25,7 +25,7 @@ action code {:
     int countIf;
     int countLoop;
     int countConstant;
-    IntermediateCode file;
+    IntermediateCode intermediateFile;
     Stack ifStack;
     Stack loopStack;
     ArrayList<String> constantList;
@@ -41,8 +41,8 @@ action code {:
         loopStack = new Stack();
         constantList = new ArrayList<>();
         
-        file = new IntermediateCode("test.txt");
-        file.openFile();
+        intermediateFile = new IntermediateCode("intermediate.ci");
+        intermediateFile.openFile();
     }
     boolean exists(String symbol){
         return table.ContainedInSymbolTable(symbol);
@@ -51,48 +51,101 @@ action code {:
         table.addNewSymbol(code, symbol, direction);
         direction++;
     }
-    Expression binaryOp(String op, Expression e1, Expression e2){
-        file.write(new IntermediateLine(op,String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+    Expression plus(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("PLUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
         return new Expression(direction++);
     }
-    Expression unaryOp(String op, String e1){
-        file.write(new IntermediateLine(op,e1,"null",String.valueOf(direction)));
+    Expression minus(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("MINUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
         return new Expression(direction++);
     }
+    Expression times(Expression e1, Expression e2){
+       intermediateFile.write(new IntermediateLine("TIMES",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+       return new Expression(direction++);
+    }
+    Expression divide(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("DIVIDE",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression number(String e1){
+        intermediateFile.write(new IntermediateLine("LOAD_NUMBER",e1,"null",String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression identifier(String e1){
+        intermediateFile.write(new IntermediateLine("LOAD_DIRECTION",String.valueOf(table.getSymbolDirection(e1)),"null",String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    /*Expression minusAux(Expression e1){
+        intermediateFile.write(new IntermediateLine("PLUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }*/
     
-    void asignValue(String id, Expression e){
-        file.write(new IntermediateLine("LOAD_DIRECTION", String.valueOf(e.getDirection()), "null",String.valueOf(table.getSymbolDirection(id))));      
-    }
 
-    void closeFile(){
-        file.close();
+    Expression and(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("AND",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
     }
-    void condition(Expression e, int number){
-        file.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","ELSE_"+String.valueOf(number)));
+    Expression or(Expression e1, Expression e2){
+       intermediateFile.write(new IntermediateLine("OR",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression equal(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("EQUAL",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression notequal(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("NOTEQUAL",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression more(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("MORE",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }
+    Expression less(Expression e1, Expression e2){
+        intermediateFile.write(new IntermediateLine("LESS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
+        return new Expression(direction++);
+    }   
+    void asignValue(String id, Expression e){
+        intermediateFile.write(new IntermediateLine("LOAD_DIRECTION", String.valueOf(e.getDirection()), "null",String.valueOf(table.getSymbolDirection(id))));      
+    }
+    void closeIntermediateFile(){
+        intermediateFile.close();
+    }
+    void condicion(Expression e, int number){
+        intermediateFile.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","ELSE_"+String.valueOf(number)));
     }
     void condition2(Expression e, int number) {
-        file.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","LOOPEND_"+String.valueOf(number)));
+        intermediateFile.write(new IntermediateLine("JUMP_CONDITION", String.valueOf(e.getDirection()), "null","LOOPEND_"+String.valueOf(number)));
     }
     void jumpLabel(String label, int number){
-        file.write(new IntermediateLine("JUMP_LABEL", "null", "null", label+"_"+String.valueOf(number)));
+        intermediateFile.write(new IntermediateLine("JUMP_LABEL", "null", "null", label+"_"+String.valueOf(number)));
     }
     void setLabel(String label, int number){
-        file.write(new IntermediateLine("LABEL", "null", "null", label+"_"+String.valueOf(number)));
+        intermediateFile.write(new IntermediateLine("LABEL", "null", "null", label+"_"+String.valueOf(number)));
     }
     void printW(Expression e){
-        file.write(new IntermediateLine("PRINT_INT", String.valueOf(e.getDirection()), "null", "null"));        
+        intermediateFile.write(new IntermediateLine("PRINT_INT", String.valueOf(e.getDirection()), "null", "null"));        
     }
     void printS(String c, int number){
         constantList.add(c);
-        file.write(new IntermediateLine("PRINT_CONSTANT", "CONSTANT_"+String.valueOf(number), "null", "null"));        
+        intermediateFile.write(new IntermediateLine("PRINT_CONSTANT", "CONSTANT_"+String.valueOf(number), "null", "null"));        
     }
     void generateConstants() {
         for(int i=0; i<constantList.size(); i++){
-            file.write(new IntermediateLine("PUT_CONSTANT", "CONSTANT_"+String.valueOf(i+1), "null", constantList.get(i)));          
+            intermediateFile.write(new IntermediateLine("PUT_CONSTANT", "CONSTANT_"+String.valueOf(i+1), "null", constantList.get(i)));          
         }
     }
     void programEnd(){
-            file.write(new IntermediateLine("END", "null", "null", "null"));          
+        intermediateFile.write(new IntermediateLine("END", "null", "null", "null"));          
+    }
+
+    void generateFinalCode(){
+        FinalCode finalCode = new FinalCode("final.ens");
+        try {
+            finalCode.translateCode(intermediateFile);
+        } catch (Exception e){
+
+        }
     }
 
 :}
@@ -125,7 +178,6 @@ non terminal Expression      cond;
 non terminal Expression      ope;
 non terminal        stmts;
 non terminal        elsestmt;
-non terminal        bodylist;
 
 /* Precedence */ 
 
@@ -141,19 +193,19 @@ precedence left     ELSE;
 
 /* Grammar Rules */ 
 
-program ::= {:init();:}
-            varlist bodylist
-            | bodylist
+program ::= {:
+                init();
+            :}
+            varlist body
+            | body
             ;
-
-bodylist ::= bodylist body
-            | body;
 
 body    ::= MAIN LPAR RPAR LKEY stmtlist 
                 {:
                     programEnd();
-                    generateConstants();
-                    closeFile();
+                    generateConstants();              
+                    closeIntermediateFile();
+                    generateFinalCode();
                 :}
             RKEY
             ;
@@ -188,7 +240,7 @@ ifstmt      ::= IF LPAR
                     :} 
                 cond:c 
                     {:
-                        condition(c, ifStack.top());
+                        condicion(c, ifStack.top());
                     :} 
                 RPAR LKEY stmtlist RKEY 
                     {:
@@ -262,24 +314,25 @@ putsstmt    ::= PUTS LPAR CONSTANT:c
 breakstmt   ::= BREAK SEMICOLON
                 ;
 
-ope     ::= ope:e1 PLUS  ope:e2                         {:RESULT=binaryOp("PLUS",e1,e2);:}                            
-            | ope:e1 MINUS ope:e2                       {:RESULT=binaryOp("MINUS",e1,e2);:}                       
-            | ope:e1 TIMES ope:e2                       {:RESULT=binaryOp("TIMES",e1,e2);:}                        
-            | ope:e1 DIVIDE ope:e2                      {:RESULT=binaryOp("DIVIDE",e1,e2);:}                       
+ope     ::= ope:e1 PLUS  ope:e2                         {:RESULT=plus(e1,e2);:}                            
+            | ope:e1 MINUS ope:e2                       {:RESULT=minus(e1,e2);:}                       
+            | ope:e1 TIMES ope:e2                       {:RESULT=times(e1,e2);:}                        
+            | ope:e1 DIVIDE ope:e2                      {:RESULT=divide(e1,e2);:}                       
             | MINUS ope:e                               {://RESULT=minus(e);:}                       
-            | NUMBER:n                                  {:RESULT=unaryOp("LOAD_NUMBER",n.toString());:}                     
+            | NUMBER:n                                  {:RESULT=number(n.toString());:}                     
             | IDENTIFIER:id                             {:if(!exists(id.toString())){
-                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());RESULT=unaryOp("LOAD_DIRECTION",null);
-                                                          }else{RESULT=unaryOp("LOAD_DIRECTION",id.toString());}
+                                                            IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());RESULT=identifier(null);
+                                                          }else{RESULT=identifier(id.toString());}
                                                            :}             
             | LPAR ope:e RPAR                           {:RESULT=e;:}                          
             ;
 
-cond    ::= cond:e1 AND cond:e2                         {:RESULT=binaryOp("AND",e1,e2);:}                     
-            | cond:e1 OR cond:e2                        {:RESULT=binaryOp("OR",e1,e2);:}                    
-            | ope:e1 EQUAL ope:e2                       {:RESULT=binaryOp("EQUAL",e1,e2);:}                     
-            | ope:e1 NOTEQUAL ope:e2                    {:RESULT=binaryOp("NOTEQUAL",e1,e2);:}                     
-            | ope:e1 MORE ope:e2                        {:RESULT=binaryOp("MORE",e1,e2);:}               
-            | ope:e1 LESS ope:e2                        {:RESULT=binaryOp("LESS",e1,e2);:}                                
+cond    ::= cond:e1 AND cond:e2                         {:RESULT=and(e1,e2);:}                     
+            | cond:e1 OR cond:e2                        {:RESULT=or(e1,e2);:}                    
+            | ope:e1 EQUAL ope:e2                       {:RESULT=equal(e1,e2);:}                     
+            | ope:e1 NOTEQUAL ope:e2                    {:RESULT=notequal(e1,e2);:}                     
+            | ope:e1 MORE ope:e2                        {:RESULT=more(e1,e2);:}               
+            | ope:e1 LESS ope:e2                        {:RESULT=less(e1,e2);:}                                
             | LPAR cond:e RPAR                          {:RESULT=e;:}
             ;
+

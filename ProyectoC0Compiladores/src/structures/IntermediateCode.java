@@ -7,31 +7,38 @@ package structures;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import structures.*;
+import java.util.ArrayList;
 /**
  *
  * @author julio
  */
 public class IntermediateCode {
-    String name;
-    PrintWriter file;
+    private String name;
+    static private ArrayList<IntermediateLine> lines = new ArrayList<>();
+    private PrintWriter file;
+    
     public IntermediateCode(String name){
         this.name = name;
     }
     
     public void openFile(){
         try{
-            file = new PrintWriter(name, "UTF-8");
+            this.file = new PrintWriter(name, "UTF-8");
         } catch (IOException e) {
             System.out.println(ErrorMessage.NOFILE);
         }
     }
     
     public void close(){
-        file.close();
+        this.file.close();
+    }
+    
+    public ArrayList<IntermediateLine> getLines(){
+        return IntermediateCode.lines;   
     }
     
     public void write(IntermediateLine line){
-        file.write(line.getContent());
+        this.file.write(line.getContent());
+        IntermediateCode.lines.add(line);
     }
 }
