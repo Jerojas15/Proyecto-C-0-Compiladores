@@ -50,17 +50,13 @@ CONSTANT = \"([\x20-\x21\x23-\xFE])*\"
             this.tokenList.add(new Token("NUMBER", yytext()));
             return symbol(sym.NUMBER, new Integer(Integer.parseInt(yytext())));
         }
-        "true" { 
-            this.tokenList.add(new Token("TRUE", yytext()));
-            return symbol(sym.BOOLEAN, new Boolean(Boolean.parseBoolean(yytext())));
-        }
-        "false" { 
-            this.tokenList.add(new Token("FALSE", yytext()));
-            return symbol(sym.BOOLEAN, new Boolean(Boolean.parseBoolean(yytext())));
-        }
         "main" { 
             this.tokenList.add(new Token("MAIN", yytext()));
             return symbol(sym.MAIN);
+        }
+        "return" { 
+            this.tokenList.add(new Token("RETURN", yytext()));
+            return symbol(sym.RETURN);
         }
         "if" { 
             this.tokenList.add(new Token("IF", yytext()));

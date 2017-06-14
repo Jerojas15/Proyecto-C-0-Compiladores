@@ -3,9 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Scarlet/Documents/NetBeansProjects/ProyectoC0Compiladores/src/steps/parser.cup</file>
-            <file>file:/C:/Users/Scarlet/Documents/NetBeansProjects/ProyectoC0Compiladores/src/structures/FinalCode.java</file>
-            <file>file:/C:/Users/Scarlet/Documents/NetBeansProjects/ProyectoC0Compiladores/src/ui/IDE.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/steps/Lexer.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/structures/Table.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/structures/IntermediateLine.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/structures/Stack.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/steps/Parser.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/steps/sym.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/steps/Lexer.flex</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/structures/IntermediateCode.java</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/steps/parser.cup</file>
+            <file>file:/home/julio/Desktop/compiladores/Proyecto-C-0-Compiladores/ProyectoC0Compiladores/src/structures/Expression.java</file>
         </group>
     </open-files>
 </project-private>

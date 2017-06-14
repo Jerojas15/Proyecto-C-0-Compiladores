@@ -39,9 +39,9 @@ public class Lexer implements java_cup.runtime.Scanner {
     "\11\0\1\4\1\4\1\47\1\4\1\4\22\0\1\7\1\6\1\5"+
     "\3\6\1\46\1\6\1\30\1\31\1\37\1\35\1\6\1\36\1\6"+
     "\1\40\12\2\1\6\1\34\1\41\1\43\1\42\2\6\32\1\4\6"+
-    "\1\3\1\6\1\15\1\26\2\1\1\13\1\14\1\1\1\24\1\21"+
-    "\1\1\1\27\1\16\1\20\1\22\1\1\1\25\1\1\1\11\1\17"+
-    "\1\10\1\12\1\1\1\23\3\1\1\32\1\45\1\33\7\6\1\50"+
+    "\1\3\1\6\1\11\1\26\2\1\1\15\1\20\1\1\1\22\1\12"+
+    "\1\1\1\27\1\23\1\10\1\13\1\1\1\25\1\1\1\14\1\24"+
+    "\1\16\1\17\1\1\1\21\3\1\1\32\1\45\1\33\7\6\1\50"+
     "\33\6\1\44\135\6\u1f29\0\1\47\1\47\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
   /** 
@@ -55,15 +55,15 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\3\1\4\1\1\10\2\1\5"+
+    "\1\0\1\1\1\2\1\3\1\4\1\1\7\2\1\5"+
     "\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15"+
-    "\1\16\1\17\1\20\3\1\1\0\1\21\4\2\1\22"+
-    "\4\2\1\23\1\24\1\25\1\26\4\2\1\27\3\2"+
-    "\1\30\1\31\1\2\1\32\1\2\1\33\1\34\1\2"+
-    "\1\35\1\36\1\37";
+    "\1\16\1\17\1\20\3\1\1\0\1\21\2\2\1\22"+
+    "\5\2\1\23\1\24\1\25\1\26\1\2\1\27\5\2"+
+    "\1\30\1\2\1\31\1\2\1\32\1\33\2\2\1\34"+
+    "\1\35\1\36";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[63];
+    int [] result = new int[60];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -89,16 +89,16 @@ public class Lexer implements java_cup.runtime.Scanner {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\51\0\122\0\173\0\51\0\244\0\315\0\366"+
-    "\0\u011f\0\u0148\0\u0171\0\u019a\0\u01c3\0\u01ec\0\51\0\51"+
+    "\0\u011f\0\u0148\0\u0171\0\u019a\0\u01c3\0\51\0\51\0\51"+
     "\0\51\0\51\0\51\0\51\0\51\0\51\0\51\0\51"+
-    "\0\51\0\u0215\0\u023e\0\u0267\0\u0290\0\244\0\51\0\u02b9"+
-    "\0\u02e2\0\u030b\0\u0334\0\122\0\u035d\0\u0386\0\u03af\0\u03d8"+
-    "\0\51\0\51\0\51\0\51\0\u0401\0\u042a\0\u0453\0\u047c"+
-    "\0\122\0\u04a5\0\u04ce\0\u04f7\0\122\0\122\0\u0520\0\122"+
-    "\0\u0549\0\122\0\122\0\u0572\0\122\0\122\0\122";
+    "\0\u01ec\0\u0215\0\u023e\0\u0267\0\244\0\51\0\u0290\0\u02b9"+
+    "\0\122\0\u02e2\0\u030b\0\u0334\0\u035d\0\u0386\0\51\0\51"+
+    "\0\51\0\51\0\u03af\0\122\0\u03d8\0\u0401\0\u042a\0\u0453"+
+    "\0\u047c\0\122\0\u04a5\0\122\0\u04ce\0\122\0\122\0\u04f7"+
+    "\0\u0520\0\122\0\122\0\122";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[63];
+    int [] result = new int[60];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -122,35 +122,34 @@ public class Lexer implements java_cup.runtime.Scanner {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\2\1\3\1\4\1\3\1\5\1\6\1\2\1\5"+
-    "\1\7\2\3\1\10\1\11\3\3\1\12\1\13\1\3"+
-    "\1\14\1\3\1\15\1\16\1\3\1\17\1\20\1\21"+
+    "\1\7\1\3\1\10\1\3\1\11\1\12\3\3\1\13"+
+    "\3\3\1\14\1\15\1\3\1\16\1\17\1\20\1\21"+
     "\1\22\1\23\1\24\1\25\1\26\1\27\1\30\1\31"+
-    "\1\32\1\33\1\34\1\35\54\0\2\3\5\0\20\3"+
-    "\23\0\1\4\47\0\3\36\1\0\1\37\41\36\1\0"+
-    "\1\36\1\0\2\3\5\0\1\3\1\40\16\3\22\0"+
-    "\2\3\5\0\6\3\1\41\11\3\22\0\2\3\5\0"+
-    "\5\3\1\42\12\3\22\0\2\3\5\0\5\3\1\43"+
-    "\12\3\22\0\2\3\5\0\4\3\1\44\5\3\1\45"+
-    "\5\3\22\0\2\3\5\0\14\3\1\46\3\3\22\0"+
-    "\2\3\5\0\2\3\1\47\15\3\22\0\2\3\5\0"+
-    "\1\3\1\50\16\3\64\0\1\51\50\0\1\52\52\0"+
-    "\1\53\51\0\1\54\3\0\2\3\5\0\2\3\1\55"+
-    "\15\3\22\0\2\3\5\0\7\3\1\56\10\3\22\0"+
-    "\2\3\5\0\6\3\1\57\11\3\22\0\2\3\5\0"+
-    "\11\3\1\60\6\3\22\0\2\3\5\0\1\61\17\3"+
-    "\22\0\2\3\5\0\11\3\1\62\6\3\22\0\2\3"+
-    "\5\0\1\63\17\3\22\0\2\3\5\0\3\3\1\64"+
-    "\14\3\22\0\2\3\5\0\3\3\1\65\14\3\22\0"+
-    "\2\3\5\0\3\3\1\66\14\3\22\0\2\3\5\0"+
-    "\7\3\1\67\10\3\22\0\2\3\5\0\12\3\1\70"+
-    "\5\3\22\0\2\3\5\0\6\3\1\71\11\3\22\0"+
-    "\2\3\5\0\7\3\1\72\3\3\1\73\4\3\22\0"+
-    "\2\3\5\0\5\3\1\74\12\3\22\0\2\3\5\0"+
-    "\3\3\1\75\14\3\22\0\2\3\5\0\3\3\1\76"+
-    "\14\3\22\0\2\3\5\0\17\3\1\77\21\0";
+    "\1\32\1\33\1\34\54\0\2\3\5\0\20\3\23\0"+
+    "\1\4\47\0\3\35\1\0\1\36\41\35\1\0\1\35"+
+    "\1\0\2\3\5\0\1\3\1\37\16\3\22\0\2\3"+
+    "\5\0\3\3\1\40\4\3\1\41\7\3\22\0\2\3"+
+    "\5\0\5\3\1\42\12\3\22\0\2\3\5\0\13\3"+
+    "\1\43\4\3\22\0\2\3\5\0\12\3\1\44\5\3"+
+    "\22\0\2\3\5\0\7\3\1\45\10\3\22\0\2\3"+
+    "\5\0\4\3\1\46\13\3\64\0\1\47\50\0\1\50"+
+    "\52\0\1\51\51\0\1\52\3\0\2\3\5\0\2\3"+
+    "\1\53\15\3\22\0\2\3\5\0\6\3\1\54\11\3"+
+    "\22\0\2\3\5\0\6\3\1\55\11\3\22\0\2\3"+
+    "\5\0\14\3\1\56\3\3\22\0\2\3\5\0\2\3"+
+    "\1\57\15\3\22\0\2\3\5\0\6\3\1\60\11\3"+
+    "\22\0\2\3\5\0\5\3\1\61\12\3\22\0\2\3"+
+    "\5\0\3\3\1\62\14\3\22\0\2\3\5\0\7\3"+
+    "\1\63\10\3\22\0\2\3\5\0\5\3\1\64\12\3"+
+    "\22\0\2\3\5\0\13\3\1\65\4\3\22\0\2\3"+
+    "\5\0\11\3\1\66\2\3\1\67\3\3\22\0\2\3"+
+    "\5\0\1\3\1\70\16\3\22\0\2\3\5\0\4\3"+
+    "\1\71\13\3\22\0\2\3\5\0\5\3\1\72\12\3"+
+    "\22\0\2\3\5\0\17\3\1\73\22\0\2\3\5\0"+
+    "\3\3\1\74\14\3\21\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[1435];
+    int [] result = new int[1353];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -188,11 +187,11 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\2\1\1\11\11\1\13\11\4\1\1\0"+
-    "\1\11\11\1\4\11\23\1";
+    "\1\0\1\11\2\1\1\11\10\1\13\11\4\1\1\0"+
+    "\1\11\10\1\4\11\22\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[63];
+    int [] result = new int[60];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -677,156 +676,151 @@ public class Lexer implements java_cup.runtime.Scanner {
             { this.tokenList.add(new Token("ERROR", yytext()));
     error("Character not recognized "+yytext());
             }
-          case 32: break;
+          case 31: break;
           case 2: 
             { this.tokenList.add(new Token("IDENTIFIER", yytext()));
             return symbol(sym.IDENTIFIER, yytext());
             }
-          case 33: break;
+          case 32: break;
           case 3: 
             { this.tokenList.add(new Token("NUMBER", yytext()));
             return symbol(sym.NUMBER, new Integer(Integer.parseInt(yytext())));
             }
-          case 34: break;
+          case 33: break;
           case 4: 
             { /* ignore */
             }
-          case 35: break;
+          case 34: break;
           case 5: 
             { this.tokenList.add(new Token("LPAR", yytext()));
             return symbol(sym.LPAR);
             }
-          case 36: break;
+          case 35: break;
           case 6: 
             { this.tokenList.add(new Token("RPAR", yytext()));
             return symbol(sym.RPAR);
             }
-          case 37: break;
+          case 36: break;
           case 7: 
             { this.tokenList.add(new Token("LKEY", yytext()));
             return symbol(sym.LKEY);
             }
-          case 38: break;
+          case 37: break;
           case 8: 
             { this.tokenList.add(new Token("RKEY", yytext()));
             return symbol(sym.RKEY);
             }
-          case 39: break;
+          case 38: break;
           case 9: 
             { this.tokenList.add(new Token("SEMICOLON", yytext()));
             return symbol(sym.SEMICOLON);
             }
-          case 40: break;
+          case 39: break;
           case 10: 
             { this.tokenList.add(new Token("PLUS", yytext()));
             return symbol(sym.PLUS);
             }
-          case 41: break;
+          case 40: break;
           case 11: 
             { this.tokenList.add(new Token("MINUS", yytext()));
             return symbol(sym.MINUS);
             }
-          case 42: break;
+          case 41: break;
           case 12: 
             { this.tokenList.add(new Token("TIMES", yytext()));
             return symbol(sym.TIMES);
             }
-          case 43: break;
+          case 42: break;
           case 13: 
             { this.tokenList.add(new Token("DIVIDE", yytext()));
             return symbol(sym.DIVIDE);
             }
-          case 44: break;
+          case 43: break;
           case 14: 
             { this.tokenList.add(new Token("LESS", yytext()));
             return symbol(sym.LESS);
             }
-          case 45: break;
+          case 44: break;
           case 15: 
             { this.tokenList.add(new Token("MORE", yytext())); 
             return symbol(sym.MORE);
             }
-          case 46: break;
+          case 45: break;
           case 16: 
             { this.tokenList.add(new Token("ASIGN", yytext()));
             return symbol(sym.ASIGN);
             }
-          case 47: break;
+          case 46: break;
           case 17: 
             { this.tokenList.add(new Token("CONSTANT", yytext()));
             return symbol(sym.CONSTANT,yytext());
             }
-          case 48: break;
+          case 47: break;
           case 18: 
             { this.tokenList.add(new Token("IF", yytext()));
             return symbol(sym.IF);
             }
-          case 49: break;
+          case 48: break;
           case 19: 
             { this.tokenList.add(new Token("EQUAL", yytext()));
             return symbol(sym.EQUAL);
             }
-          case 50: break;
+          case 49: break;
           case 20: 
             { this.tokenList.add(new Token("NOTEQUAL", yytext()));
             return symbol(sym.NOTEQUAL);
             }
-          case 51: break;
+          case 50: break;
           case 21: 
             { this.tokenList.add(new Token("OR", yytext()));
             return symbol(sym.OR);
             }
-          case 52: break;
+          case 51: break;
           case 22: 
             { this.tokenList.add(new Token("AND", yytext()));
             return symbol(sym.AND);
             }
-          case 53: break;
+          case 52: break;
           case 23: 
             { this.tokenList.add(new Token("TYPE", yytext()));
             return symbol(sym.INT);
             }
-          case 54: break;
+          case 53: break;
           case 24: 
-            { this.tokenList.add(new Token("TRUE", yytext()));
-            return symbol(sym.BOOLEAN, new Boolean(Boolean.parseBoolean(yytext())));
+            { this.tokenList.add(new Token("MAIN", yytext()));
+            return symbol(sym.MAIN);
             }
-          case 55: break;
+          case 54: break;
           case 25: 
             { this.tokenList.add(new Token("ELSE", yytext()));
             return symbol(sym.ELSE);
             }
-          case 56: break;
+          case 55: break;
           case 26: 
-            { this.tokenList.add(new Token("MAIN", yytext()));
-            return symbol(sym.MAIN);
+            { this.tokenList.add(new Token("PUTW", yytext())); 
+            return symbol(sym.PUTW);
             }
-          case 57: break;
+          case 56: break;
           case 27: 
             { this.tokenList.add(new Token("PUTS", yytext()));
             return symbol(sym.PUTS);
             }
-          case 58: break;
+          case 57: break;
           case 28: 
-            { this.tokenList.add(new Token("PUTW", yytext())); 
-            return symbol(sym.PUTW);
-            }
-          case 59: break;
-          case 29: 
-            { this.tokenList.add(new Token("FALSE", yytext()));
-            return symbol(sym.BOOLEAN, new Boolean(Boolean.parseBoolean(yytext())));
-            }
-          case 60: break;
-          case 30: 
             { this.tokenList.add(new Token("WHILE", yytext()));
             return symbol(sym.WHILE);
             }
-          case 61: break;
-          case 31: 
+          case 58: break;
+          case 29: 
             { this.tokenList.add(new Token("BREAK", yytext()));
             return symbol(sym.BREAK);
             }
-          case 62: break;
+          case 59: break;
+          case 30: 
+            { this.tokenList.add(new Token("RETURN", yytext()));
+            return symbol(sym.RETURN);
+            }
+          case 60: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
