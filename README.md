@@ -18,7 +18,9 @@
 -  Identiﬁcadores y palabras reservadas: secuencia de caracteres, dígitos o caracteres de subrayado que comienzan por una letra o por un caracter de subrayado. Los identiﬁcadores son utilizados para nombrar las entidades del programa como las variables. Dos identiﬁcadores con los mismos caracteres sólo que unos están en mayúsculas y otros están en minúsculas son considerados diferentes. Las palabras reservadas son identiﬁcadores que tienen un signiﬁcado especial. 
     -  Las palabras reservadas de C −0 son: main, if, while, else, putw, puts, int, break
 
--  Tipos de datos: solo vamos a considerar un tipo de dato, el tipo entero, que se representa con la palabra reservada int.
+-  Tipos de datos: se van a considerar los tipo de datos:
+    - Entero: se representa con la palabra reservada int.
+    - String: se representa con la palabra reservada string.
 -  Sentencias de control de ﬂujo: 
     -  if(condición)sentencia1;else sentencia2; 
         -  else no siempre aparece, por lo que se puede omitir
