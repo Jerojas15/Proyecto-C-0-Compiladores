@@ -10,31 +10,33 @@ public class sym {
   /* terminals */
   public static final int TIMES = 4;
   public static final int AND = 10;
-  public static final int ELSE = 27;
+  public static final int ELSE = 29;
   public static final int SEMICOLON = 15;
   public static final int PLUS = 2;
-  public static final int INT = 25;
+  public static final int INT = 27;
   public static final int OR = 11;
   public static final int EQUAL = 8;
-  public static final int WHILE = 22;
+  public static final int WHILE = 24;
   public static final int NOTEQUAL = 9;
-  public static final int CONSTANT = 18;
-  public static final int IDENTIFIER = 19;
+  public static final int CONSTANT = 20;
+  public static final int RBRA = 18;
+  public static final int IDENTIFIER = 21;
   public static final int RKEY = 16;
-  public static final int IF = 21;
+  public static final int IF = 23;
+  public static final int LBRA = 19;
   public static final int ASIGN = 12;
   public static final int LKEY = 17;
-  public static final int BOOLEAN = 29;
-  public static final int NUMBER = 28;
+  public static final int STRING = 31;
+  public static final int NUMBER = 30;
   public static final int EOF = 0;
   public static final int DIVIDE = 5;
-  public static final int MAIN = 20;
+  public static final int MAIN = 22;
   public static final int MORE = 6;
-  public static final int BREAK = 26;
-  public static final int PUTW = 24;
+  public static final int BREAK = 28;
+  public static final int PUTW = 26;
   public static final int MINUS = 3;
   public static final int error = 1;
-  public static final int PUTS = 23;
+  public static final int PUTS = 25;
   public static final int RPAR = 14;
   public static final int LPAR = 13;
   public static final int LESS = 7;
@@ -57,6 +59,8 @@ public class sym {
   "SEMICOLON",
   "RKEY",
   "LKEY",
+  "RBRA",
+  "LBRA",
   "CONSTANT",
   "IDENTIFIER",
   "MAIN",
@@ -68,7 +72,7 @@ public class sym {
   "BREAK",
   "ELSE",
   "NUMBER",
-  "BOOLEAN"
+  "STRING"
   };
 }
 

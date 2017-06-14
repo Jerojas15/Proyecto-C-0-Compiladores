@@ -14,11 +14,19 @@ public class Symbol {
     private int cod;
     private String id;
     private int direct;
+    private int size;
     
     public Symbol(int cod, String id, int direct){
         this.cod = cod;
         this.direct = direct;
         this.id = id;
+    }
+    
+    public Symbol(int cod, String id, int direct, int size){
+        this.cod = cod;
+        this.direct = direct;
+        this.id = id;
+        this.size = size;
     }
     
     public Symbol(int direct){
@@ -35,5 +43,9 @@ public class Symbol {
     
     public String getId(){
         return this.id;
+    }
+    
+    public int getSize(){
+        return this.size;
     }
 }

@@ -23,6 +23,7 @@ public class Table {
         this.symbolTable = new HashMap<>();
         this.typeTable = new HashMap<>();
         this.typeTable.put(001, new Type(0,"int"));
+        this.typeTable.put(002, new Type(0,"string"));
     }
     
     public boolean ContainedInSymbolTable(String value) {
@@ -45,5 +46,10 @@ public class Table {
     public void addNewSymbol(int cod, String symbolName, int direction){
         System.out.println("New Symbol added to table: "+symbolName+" Symbol Code: "+cod+" direction: "+direction+" Number: "+ symbolCount);
         symbolTable.put(symbolCount++, new Symbol(cod,symbolName,direction));
+    }
+    
+    public void addNewSymbol(int cod, String symbolName, int direction, int size){
+        System.out.println("New Symbol added to table: "+symbolName+" Symbol Code: "+cod+" direction: "+direction+" Size: "+size+" Number: "+ symbolCount);
+        symbolTable.put(symbolCount++, new Symbol(cod,symbolName,direction,size));
     }
 }

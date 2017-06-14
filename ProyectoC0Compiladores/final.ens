@@ -1,127 +1,133 @@
-        MOVE #10 , /30002
-        MOVE /30002 , /30000
-        MOVE #0 , /30003
-        MOVE /30003 , /30001
+        MOVE #10 , /30003
+        MOVE /30003 , /30000
+        MOVE #0 , /30004
+        MOVE /30004 , /30001
         WRSTR /CONSTANT_1
-        MOVE /30000 , /30004
-        WRINT /30004
+        MOVE /30000 , /30005
+        WRINT /30005
         WRSTR /CONSTANT_2
 LOOP_1: NOP
-        MOVE /30000 , /30005
-        MOVE #0 , /30006
-        CMP /30006 , /30005
-        BN $5
+        MOVE /30000 , /30006
         MOVE #0 , /30007
+        CMP /30007 , /30006
+        BN $5
+        MOVE #0 , /30008
         BR $3
-        MOVE #1 , /30007
-        CMP #0 , /30007
+        MOVE #1 , /30008
+        CMP #0 , /30008
         BZ /LOOPEND_1
-        MOVE /30001 , /30008
-        MOVE /30000 , /30009
-        ADD /30008 , /30009
-        MOVE .A , /30010
-        MOVE /30010 , /30001
-        MOVE /30000 , /30011
-        MOVE #1 , /30012
-        SUB /30011 , /30012
-        MOVE .A , /30013
-        MOVE /30013 , /30000
+        MOVE /30001 , /30009
+        MOVE /30000 , /30010
+        ADD /30009 , /30010
+        MOVE .A , /30011
+        MOVE /30011 , /30001
+        MOVE /30000 , /30012
+        MOVE #1 , /30013
+        SUB /30012 , /30013
+        MOVE .A , /30014
+        MOVE /30014 , /30000
+        MOVE /30000 , /30015
+        WRINT /30015
+        WRSTR /CONSTANT_3
         BR /LOOP_1
 LOOPEND_1: NOP
-        WRSTR /CONSTANT_3
-        MOVE /30001 , /30014
-        WRINT /30014
         WRSTR /CONSTANT_4
-        MOVE /30000 , /30015
-        MOVE #0 , /30016
-        CMP /30015 , /30016
-        BZ $5
-        MOVE #0 , /30017
-        BR $3
-        MOVE #1 , /30017
-        MOVE /30001 , /30018
-        MOVE #54 , /30019
-        CMP /30019 , /30018
-        BN $5
-        MOVE #0 , /30020
-        BR $3
-        MOVE #1 , /30020
-        AND /30017 , /30020
-        MOVE .A , /30021
-        CMP #0 , /30021
-        BZ /ELSE_1
+        MOVE /30001 , /30016
+        WRINT /30016
         WRSTR /CONSTANT_5
+        MOVE /30000 , /30017
+        MOVE #0 , /30018
+        CMP /30017 , /30018
+        BZ $5
+        MOVE #0 , /30019
+        BR $3
+        MOVE #1 , /30019
+        MOVE /30001 , /30020
+        MOVE #5004 , /30021
+        CMP /30021 , /30020
+        BN $5
+        MOVE #0 , /30022
+        BR $3
+        MOVE #1 , /30022
+        AND /30019 , /30022
+        MOVE .A , /30023
+        CMP #0 , /30023
+        BZ /ELSE_1
+        WRSTR /CONSTANT_6
         BR /ENDIF_1
 ELSE_1: NOP
-        WRSTR /CONSTANT_6
-ENDIF_1: NOP
         WRSTR /CONSTANT_7
-        MOVE /30000 , /30022
-        MOVE /30001 , /30023
-        MOVE #5 , /30024
-        DIV /30023 , /30024
-        MOVE .A , /30025
-        ADD /30022 , /30025
-        MOVE .A , /30026
-        WRINT /30026
+ENDIF_1: NOP
         WRSTR /CONSTANT_8
-        MOVE /30000 , /30027
-        MOVE #2 , /30028
-        ADD /30027 , /30028
-        MOVE .A , /30029
-        MOVE /30029 , /30000
+        MOVE /30000 , /30024
+        MOVE /30001 , /30025
+        MOVE #5 , /30026
+        DIV /30025 , /30026
+        MOVE .A , /30027
+        ADD /30024 , /30027
+        MOVE .A , /30028
+        WRINT /30028
+        WRSTR /CONSTANT_9
+        MOVE /30000 , /30029
+        MOVE #2 , /30030
+        ADD /30029 , /30030
+        MOVE .A , /30031
+        MOVE /30031 , /30000
 LOOP_2: NOP
-        MOVE /30000 , /30030
-        MOVE #2 , /30031
-        MUL /30030 , /30031
-        MOVE .A , /30032
-        MOVE /30001 , /30033
-        CMP /30032 , /30033
+        MOVE /30000 , /30032
+        MOVE #2 , /30033
+        MUL /30032 , /30033
+        MOVE .A , /30034
+        MOVE /30001 , /30035
+        CMP /30034 , /30035
         BN $5
-        MOVE #0 , /30034
+        MOVE #0 , /30036
         BR $3
-        MOVE #1 , /30034
-        CMP #0 , /30034
+        MOVE #1 , /30036
+        CMP #0 , /30036
         BZ /LOOPEND_2
 LOOP_3: NOP
-        MOVE /30001 , /30035
-        MOVE /30000 , /30036
-        MOVE #4 , /30037
-        MUL /30036 , /30037
-        MOVE .A , /30038
-        CMP /30038 , /30035
+        MOVE /30001 , /30037
+        MOVE /30000 , /30038
+        MOVE #4 , /30039
+        MUL /30038 , /30039
+        MOVE .A , /30040
+        CMP /30040 , /30037
         BN $5
-        MOVE #0 , /30039
+        MOVE #0 , /30041
         BR $3
-        MOVE #1 , /30039
-        CMP #0 , /30039
-        BZ /LOOPEND_3
-        MOVE /30000 , /30040
         MOVE #1 , /30041
-        ADD /30040 , /30041
-        MOVE .A , /30042
-        MOVE /30042 , /30000
+        CMP #0 , /30041
+        BZ /LOOPEND_3
+        MOVE /30000 , /30042
+        MOVE #1 , /30043
+        ADD /30042 , /30043
+        MOVE .A , /30044
+        MOVE /30044 , /30000
         BR /LOOP_3
 LOOPEND_3: NOP
-        MOVE /30000 , /30043
-        MOVE #1 , /30044
-        ADD /30043 , /30044
-        MOVE .A , /30045
-        MOVE /30045 , /30000
+        MOVE /30000 , /30045
+        MOVE #1 , /30046
+        ADD /30045 , /30046
+        MOVE .A , /30047
+        MOVE /30047 , /30000
         BR /LOOP_2
 LOOPEND_2: NOP
-        WRSTR /CONSTANT_9
-        MOVE /30000 , /30046
-        WRINT /30046
         WRSTR /CONSTANT_10
+        MOVE /30000 , /30048
+        WRINT /30048
+        WRSTR /CONSTANT_11
+        WRSTR /a
 
 CONSTANT_1: DATA "Se debe escribir 10 : "
 CONSTANT_2: DATA "\n"
-CONSTANT_3: DATA "Se debe escribir 55 : "
-CONSTANT_4: DATA "\n"
-CONSTANT_5: DATA "Esto se debe leer\n"
-CONSTANT_6: DATA "Esto no se debe leer\n"
-CONSTANT_7: DATA "Se debe escribir 11 : "
-CONSTANT_8: DATA "\n"
-CONSTANT_9: DATA "Se debe escribir 28 : "
-CONSTANT_10: DATA "\n"
+CONSTANT_3: DATA "\n"
+CONSTANT_4: DATA "Se debe escribir 55 : "
+CONSTANT_5: DATA "\n"
+CONSTANT_6: DATA "Esto se debe leer------bingo\n"
+CONSTANT_7: DATA "Esto no se debe leer\n"
+CONSTANT_8: DATA "Se debe escribir 11 : "
+CONSTANT_9: DATA "\n"
+CONSTANT_10: DATA "Se debe escribir 28 : "
+CONSTANT_11: DATA "\n"
+a: DATA "Hello World!!!!!!!!!!!!!!!!!!!!!!"

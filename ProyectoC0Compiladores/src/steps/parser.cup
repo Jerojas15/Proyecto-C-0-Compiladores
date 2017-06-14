@@ -29,7 +29,7 @@ action code {:
     Stack ifStack;
     Stack loopStack;
     ArrayList<String> constantList;
-
+    ArrayList<StringPair> stringList;
     void init(){
         table = new Table();
         inWhile = 0;
@@ -40,6 +40,7 @@ action code {:
         ifStack = new Stack();
         loopStack = new Stack();
         constantList = new ArrayList<>();
+        stringList = new ArrayList<>();
         
         intermediateFile = new IntermediateCode("intermediate.ci");
         intermediateFile.openFile();
@@ -50,6 +51,12 @@ action code {:
     void addNewSymbol(int code, String symbol){
         table.addNewSymbol(code, symbol, direction);
         direction++;
+    }
+    void addNewSymbol2(int code, String symbol, int size){
+        table.addNewSymbol(code, symbol, direction, size);
+        for (int i=0; i<size; i++){
+            direction++;
+        }     
     }
     Expression plus(Expression e1, Expression e2){
         intermediateFile.write(new IntermediateLine("PLUS",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
@@ -71,6 +78,11 @@ action code {:
         intermediateFile.write(new IntermediateLine("LOAD_NUMBER",e1,"null",String.valueOf(direction)));
         return new Expression(direction++);
     }
+    Expression string(String var, String id){        
+        //intermediateFile.write(new IntermediateLine("PUT_CONSTANT", id, "null", var));
+        stringList.add(new StringPair(id, var));
+        return new Expression(direction++);
+    }
     Expression identifier(String e1){
         intermediateFile.write(new IntermediateLine("LOAD_DIRECTION",String.valueOf(table.getSymbolDirection(e1)),"null",String.valueOf(direction)));
         return new Expression(direction++);
@@ -80,7 +92,6 @@ action code {:
         return new Expression(direction++);
     }*/
     
-
     Expression and(Expression e1, Expression e2){
         intermediateFile.write(new IntermediateLine("AND",String.valueOf(e1.getDirection()),String.valueOf(e2.getDirection()),String.valueOf(direction)));
         return new Expression(direction++);
@@ -130,15 +141,22 @@ action code {:
         constantList.add(c);
         intermediateFile.write(new IntermediateLine("PRINT_CONSTANT", "CONSTANT_"+String.valueOf(number), "null", "null"));        
     }
+    void printS2(String id){
+        intermediateFile.write(new IntermediateLine("PRINT_CONSTANT", id, "null", "null"));        
+    }
     void generateConstants() {
         for(int i=0; i<constantList.size(); i++){
             intermediateFile.write(new IntermediateLine("PUT_CONSTANT", "CONSTANT_"+String.valueOf(i+1), "null", constantList.get(i)));          
         }
     }
+    void generateStrings() {
+        for(int i=0; i<stringList.size(); i++){
+            intermediateFile.write(new IntermediateLine("PUT_CONSTANT", stringList.get(i).getId(), "null", stringList.get(i).getValue()));          
+        }
+    }
     void programEnd(){
         intermediateFile.write(new IntermediateLine("END", "null", "null", "null"));          
     }
-
     void generateFinalCode(){
         FinalCode finalCode = new FinalCode("final.ens");
         try {
@@ -155,12 +173,13 @@ action code {:
 terminal            PLUS, MINUS, TIMES, DIVIDE; 
 terminal            MORE, LESS, EQUAL, NOTEQUAL;
 terminal            AND, OR, ASIGN;
-terminal            LPAR, RPAR, SEMICOLON, RKEY, LKEY;
+terminal            LPAR, RPAR, SEMICOLON, RKEY, LKEY, RBRA, LBRA;
 terminal            CONSTANT;
 terminal            IDENTIFIER;
 terminal            MAIN, IF, WHILE, PUTS, PUTW, INT, BREAK, ELSE;
 terminal Integer    NUMBER;
-terminal Boolean    BOOLEAN;
+terminal String     STRING;
+
 
 non terminal        program;
 non terminal        body;
@@ -174,10 +193,15 @@ non terminal        asignstmt;
 non terminal        putwstmt;
 non terminal        putsstmt;
 non terminal        breakstmt;
-non terminal Expression      cond;
-non terminal Expression      ope;
 non terminal        stmts;
 non terminal        elsestmt;
+non terminal        vecdecl;
+non terminal        strdecl;
+non terminal        intdecl;
+non terminal Expression      cond;
+non terminal Expression      ope;
+
+
 
 /* Precedence */ 
 
@@ -187,6 +211,7 @@ precedence left     EQUAL, NOTEQUAL;
 precedence left     MORE, LESS; 
 precedence left     PLUS, MINUS; 
 precedence left     TIMES, DIVIDE;
+precedence left     LBRA, RBRA; 
 precedence left     LPAR, RPAR; 
 precedence left     ELSE; 
 
@@ -203,7 +228,8 @@ program ::= {:
 body    ::= MAIN LPAR RPAR LKEY stmtlist 
                 {:
                     programEnd();
-                    generateConstants();              
+                    generateConstants(); 
+                    generateStrings();
                     closeIntermediateFile();
                     generateFinalCode();
                 :}
@@ -214,12 +240,43 @@ varlist ::= varlist var
             | var
             ;
 
-var     ::= INT IDENTIFIER:id SEMICOLON              {: if(!exists(id.toString())){
-                                                            addNewSymbol(sym.INT, id.toString());
-                                                        }else{
-                                                            IDE.error = true;
-                                                            IDE.errMessage = IDE.errMessage +(ErrorMessage.VARIABLEEXISTS+id.toString());}:}
+var     ::= intdecl
+            | vecdecl
+            | strdecl
             ;
+
+intdecl     ::= INT IDENTIFIER:id SEMICOLON              
+            {: 
+                if(!exists(id.toString())){
+                    addNewSymbol(sym.INT, id.toString());
+                }else{
+                    IDE.error = true;
+                    IDE.errMessage = IDE.errMessage +(ErrorMessage.VARIABLEEXISTS+id.toString());
+                }
+            :}
+            ;
+
+vecdecl     ::= INT LBRA NUMBER:n RBRA IDENTIFIER:id SEMICOLON 
+                {:
+                    if(!exists(id.toString())){
+                        addNewSymbol2(sym.INT, id.toString(),n);
+                    }else{
+                        IDE.error = true;
+                    IDE.errMessage = IDE.errMessage +(ErrorMessage.VARIABLEEXISTS+id.toString());
+                }
+                :}
+                ;
+
+strdecl      ::= STRING IDENTIFIER:id SEMICOLON
+                {:
+                    if(!exists(id.toString())){
+                        addNewSymbol(sym.STRING, id.toString());
+                    }else{
+                        IDE.error = true;
+                        IDE.errMessage = IDE.errMessage +(ErrorMessage.VARIABLEEXISTS+id.toString());
+                }
+                :}
+                ;
 
 stmtlist::= stmts
             | ;
@@ -231,7 +288,12 @@ stmt    ::= ifstmt
             | asignstmt
             | putwstmt
             | putsstmt
-            | breakstmt                              {:if(inWhile==0){IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.BREAKERROR);}:}
+            | breakstmt
+                {:
+                    if(inWhile==0){
+                        IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.BREAKERROR);
+                    }
+                :}
             ;
 
 ifstmt      ::= IF LPAR
@@ -283,16 +345,26 @@ whilestmt   ::= WHILE LPAR
                     :}
                 ;
 
-asignstmt   ::= IDENTIFIER:id 
+asignstmt   ::= IDENTIFIER:id ASIGN CONSTANT:c SEMICOLON 
+                    {:                       
+                        if(!exists(id.toString())){
+                            System.out.println("BITCH");
+                            IDE.error = true;
+                            IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());
+                        }
+                        else{
+                            RESULT=string(c.toString(),id.toString());
+                        }
+                    :}
+                | IDENTIFIER:id ASIGN ope:e SEMICOLON
                     {:
                         if(!exists(id.toString())){
                             IDE.error = true;
                             IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());
                         }
-                    :}
-                ASIGN ope:e SEMICOLON 
-                    {:
-                        asignValue(id.toString(), e);
+                        else{
+                            asignValue(id.toString(), e);
+                        }
                     :}
                 ;
 
@@ -309,6 +381,11 @@ putsstmt    ::= PUTS LPAR CONSTANT:c
                         printS(c.toString(), countConstant);
                     :} 
                 RPAR SEMICOLON
+                | PUTS LPAR IDENTIFIER:id
+                    {:
+                        printS2(id.toString());
+                    :} 
+                RPAR SEMICOLON
                 ;
 
 breakstmt   ::= BREAK SEMICOLON
@@ -323,7 +400,7 @@ ope     ::= ope:e1 PLUS  ope:e2                         {:RESULT=plus(e1,e2);:}
             | IDENTIFIER:id                             {:if(!exists(id.toString())){
                                                             IDE.error = true;IDE.errMessage = IDE.errMessage +(ErrorMessage.NOVARIABLE+id.toString());RESULT=identifier(null);
                                                           }else{RESULT=identifier(id.toString());}
-                                                           :}             
+                                                           :}                                                   
             | LPAR ope:e RPAR                           {:RESULT=e;:}                          
             ;
 
